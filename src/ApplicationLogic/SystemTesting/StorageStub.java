@@ -1,6 +1,4 @@
-package ApplicationLogic;
-
-import static org.junit.Assert.assertTrue;
+package ApplicationLogic.SystemTesting;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,17 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.junit.Test;
-import org.junit.Ignore;
-
-public class TestCases {
-	@Test
-	@Ignore
-	public void ignoreTest() {
-		throw new RuntimeException("This should be ignored!!!");
-	}
-	
-	private boolean reinitializeDatabase() {
+public class StorageStub {
+	public static boolean reinitializeDatabase() {
 		try {
 			File SQL_file = new File("init_db.sql");
 			if (!SQL_file.exists()) throw new FileNotFoundException("Could not find SQL init script at: " + SQL_file.getAbsolutePath());
@@ -59,10 +48,5 @@ public class TestCases {
 			ex.printStackTrace();
 			return false;
 		}
-	}
-	
-	@Test
-	public void test1() {
-		assertTrue(reinitializeDatabase());
 	}
 }
