@@ -1,12 +1,17 @@
 package Storage;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
 /**
  * This stub class is used for unit testing the ScheduleMakerController class; it
- * provides the minimum set of required methods and data to support that testing.
+ * provides the minimum set of required methods and data to satisfy the dependencies the
+ * controller requires to operate. 
+ * 
+ * Functionally, this class represents a course being offered at the university on specific
+ * days at the same time each day it occurs.
+ * 
  * To control the size of the testing input domain, this class has a preset number of
  * configurations; the single parameter to the constructor will automatically pre-populate
  * the object with the necessary information to support one or more specific test cases.
@@ -19,13 +24,15 @@ public class ClassDetailsStub {
 	 * Each constant defines a course schedule and what other configurations it conflicts with.
 	 */
 	public static enum TEST_CONFIG {
-		/** A Monday/Wednesday/Friday schedule; conflicts with MonWedFri2. */
-		MonWedFri1("1010100"),
-		/** Another Monday/Wednesday/Friday schedule; conflicts with MonWedFri1. */
+		/** A Monday/Wednesday/Friday class that occurs at the same time as MonWedFri1B. */
+		MonWedFri1A("1010100"),
+		/** Another Monday/Wednesday/Friday class that occurs at the same time as MonWedFri1A. */
+		MonWedFri1B("1010100"),
+		/** Another Monday/Wednesday/Friday schedule, offered at a time that does not overlap the other MWF classes. */
 		MonWedFri2("1010100"),
-		/** A Saturday only schedule. */
+		/** A Saturday only class. */
 		SatOnly("0000010"),
-		/** A Tuesday/Thursday schedule. */
+		/** A Tuesday/Thursday class. */
 		TueThu("0101000");
 		
 		/** Internal storage for the days a particular configuration represents. */
@@ -53,9 +60,17 @@ public class ClassDetailsStub {
 	/** The configuration conflicts used by the hasConflict() method. */
 	private static final TreeMap<TEST_CONFIG, List<TEST_CONFIG>> CONFLICTING_CONFIGURATIONS = new TreeMap<>();
 	static {
-		//TODO: manually assign conflicting course schedules
-		CONFLICTING_CONFIGURATIONS.put(TEST_CONFIG.MonWedFri1, Collections.singletonList(TEST_CONFIG.MonWedFri2));
-		CONFLICTING_CONFIGURATIONS.put(TEST_CONFIG.MonWedFri2, Collections.singletonList(TEST_CONFIG.MonWedFri1));
+		// declare that every schedule conflicts with itself
+		for (TEST_CONFIG config : TEST_CONFIG.values()) {
+			ArrayList<TEST_CONFIG> selfConflictList = new ArrayList<>();
+			selfConflictList.add(config);
+			CONFLICTING_CONFIGURATIONS.put(config, selfConflictList);
+		}
+		
+		// in addition, schedule MonWedFri1A conflicts with MonWedFri1B; due to reflexive nature,
+		// add it both ways into the CONFLICTING_CONFIGURATIONS object
+		CONFLICTING_CONFIGURATIONS.get(TEST_CONFIG.MonWedFri1A).add(TEST_CONFIG.MonWedFri1B);
+		CONFLICTING_CONFIGURATIONS.get(TEST_CONFIG.MonWedFri1B).add(TEST_CONFIG.MonWedFri1A);
 	}
 	
 	/** The (readonly) configuration of this particular ClassDetailsStub object. */
@@ -65,8 +80,11 @@ public class ClassDetailsStub {
 	 * Sole constructor; the single parameter indicates what data the object will contain for testing.
 	 * 
 	 * @param config the configuration that this ClassDetailsStub object will have
+	 * @throws NullPointerException if the parameter is null
 	 */
 	public ClassDetailsStub(TEST_CONFIG config) {
+		if (config == null) throw new NullPointerException("Config parameter cannot be null");
+		
 		this.config = config;
 	}
 	
@@ -90,6 +108,8 @@ public class ClassDetailsStub {
 	 * @return true iff there is a conflict between the course details of this course and the supplied one
 	 */
 	public boolean hasConflict(ClassDetailsStub cds) {
-		return CONFLICTING_CONFIGURATIONS.get(cds).contains(this);
+		return CONFLICTING_CONFIGURATIONS.get(cds.config).contains(this.config)
+				||
+			   CONFLICTING_CONFIGURATIONS.get(this.config).contains(cds.config);
 	}
 }
