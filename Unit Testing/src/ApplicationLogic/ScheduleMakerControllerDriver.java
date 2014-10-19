@@ -3,12 +3,15 @@ package ApplicationLogic;
 import static org.junit.Assert.*;
 import static Storage.ClassDetailsStub.TEST_CONFIG;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 import org.junit.Test;
 
 import Storage.ClassDetailsStub;
+import Storage.ScheduleStub;
 
 public class ScheduleMakerControllerDriver {
 	/**
@@ -21,7 +24,7 @@ public class ScheduleMakerControllerDriver {
 	public void TEAM3_CONTROLLER_UT01() {
 		ScheduleMakerController smc = new ScheduleMakerController();
 		ClassDetailsStub MWFclassSchedule = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
-		ArrayList<ArrayList<ClassDetailsStub>> sameSchedules = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> sameSchedules = new ArrayList<>();
 		ArrayList<ClassDetailsStub> schedule1 = new ArrayList<>(),
 				schedule2 = new ArrayList<>();
 		
@@ -44,7 +47,7 @@ public class ScheduleMakerControllerDriver {
 	public void TEAM3_CONTROLLER_UT02() {
 		ScheduleMakerController smc = new ScheduleMakerController();
 		ClassDetailsStub SatClassSchedule = new ClassDetailsStub(TEST_CONFIG.SatOnly);
-		ArrayList<ArrayList<ClassDetailsStub>> oneSchedule = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> oneSchedule = new ArrayList<>();
 		ArrayList<ClassDetailsStub> schedule1 = new ArrayList<>();
 		
 		schedule1.add(SatClassSchedule);
@@ -67,7 +70,7 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub classX = new ClassDetailsStub(TEST_CONFIG.SatOnly),
 						 classY = new ClassDetailsStub(TEST_CONFIG.MonWedFri2),
 						 classZ = new ClassDetailsStub(TEST_CONFIG.TueThu);
-		ArrayList<ArrayList<ClassDetailsStub>> twoSchedules = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new ArrayList<>();
 		ArrayList<ClassDetailsStub> scheduleA = new ArrayList<>(),
 									scheduleB = new ArrayList<>();
 		
@@ -88,16 +91,16 @@ public class ScheduleMakerControllerDriver {
 	 * Preconditions: There exists a ScheduleMakerController object and 2 different schedules A and B, where schedule A
 	 * 				  has class X and schedule B has class Y (X and Y are distinct and do not conflict).
 	 * Input: A Collection of 2 ArrayLists, containing schedules A and B (the runtime type of the Collection is NOT ArrayList).
-	 * Expected Output: hasConflict() == false
+	 * Expected Output: hasConflict() == false and exceptionThrown == null
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT04() {
-		boolean exceptionThrown = false,
-				schedulesConflict = false;
+		Exception exceptionThrown = null;
+		boolean schedulesConflict = false;
 		ScheduleMakerController smc = new ScheduleMakerController();
 		ClassDetailsStub classX = new ClassDetailsStub(TEST_CONFIG.SatOnly),
 						 classY = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
-		HashSet<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<>();
+		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<>();
 		ArrayList<ClassDetailsStub> scheduleA = new ArrayList<>(),
 									scheduleB = new ArrayList<>();
 		
@@ -108,12 +111,73 @@ public class ScheduleMakerControllerDriver {
 		
 		try {
 			schedulesConflict = smc.conflict(twoSchedules);
-			exceptionThrown = false;
 		} catch (ClassCastException cce) {
-			exceptionThrown = true;
+			exceptionThrown = cce;
 		}
 		
-		assertFalse(exceptionThrown);
+		assertNull(exceptionThrown);
 		assertFalse(schedulesConflict);
+	}
+	
+	/**
+	 * Purpose: The balance of an empty schedule should be 0 (zero).
+	 * Preconditions: There exists a ScheduleMakerController object with no saved schedules.
+	 * Input: An empty Collection, indicating no saved schedules.
+	 * Expected Output: getBalance() == 0.0 and exceptionThrown == null
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT05() {
+		Exception exceptionThrown = null;
+		double balance = 0.0d;
+		
+		try {
+			ScheduleMakerController smc = new ScheduleMakerController();
+			Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+			Object balanceObj = null;
+			Method getBalance = smc.getClass().getDeclaredMethod("getBalance", (Class<?> []) null);
+			
+			smc.saveSchedules(savedSchedules);
+			balanceObj = getBalance.invoke(smc, (Object[]) null);
+			
+			if (balanceObj == null) throw new NullPointerException("getBalance() returned null; expected a number");
+			else if (!(balanceObj instanceof Number)) throw new RuntimeException("getBalance() did not return a number");
+		} catch (Exception ex) {
+			exceptionThrown = ex;
+		}
+		
+		assertNull(exceptionThrown);
+		assertEquals(balance, 0.0d, 0.0d);
+	}
+	
+	/**
+	 * Purpose: The balance of a non-empty schedule should be greater than 0 (zero).
+	 * Preconditions: There exists a ScheduleMakerController object with no saved schedules and a non-empty schedule to save.
+	 * Input: A Collection containing the single schedule to save; the schedule has a single course in it.
+	 * Expected Output: getBalance() > 0.0 and exceptionThrown == null
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT06() {
+		Exception exceptionThrown = null;
+		boolean balanceGreaterThanZero = false;
+		
+		try {
+			ScheduleMakerController smc = new ScheduleMakerController();
+			Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+			Object balanceObj = null;
+			Method getBalance = smc.getClass().getDeclaredMethod("getBalance", (Class<?> []) null);
+			
+			smc.saveSchedules(savedSchedules);
+			balanceObj = getBalance.invoke(smc, (Object[]) null);
+			
+			if (balanceObj == null) throw new NullPointerException("getBalance() returned null; expected a number");
+			else if (!(balanceObj instanceof Number)) throw new RuntimeException("getBalance() did not return a number");
+			
+			balanceGreaterThanZero = ((Number) balanceObj).doubleValue() > 0.0d;
+		} catch (Exception ex) {
+			exceptionThrown = ex;
+		}
+		
+		assertNull(exceptionThrown);
+		assertTrue(balanceGreaterThanZero);
 	}
 }
