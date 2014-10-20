@@ -1,8 +1,46 @@
 package Storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.TreeMap;
 
 public class CourseStub {
+	// for each campus, define a mapping from TERM/COURSE to a list of CLASSDETAILS
+	private static final TreeMap<String,ArrayList<ClassDetailsStub>> BBC_COURSES = new TreeMap<>();
+	private static final TreeMap<String,ArrayList<ClassDetailsStub>> MMC_COURSES = new TreeMap<>();
+	
+	public static void initializeCourses() {
+		BBC_COURSES.clear();
+		MMC_COURSES.clear();
+	}
+	
+	public static void registerCourse(String campus, String term, String course, ClassDetailsStub cds) {
+		if (campus == null || !campus.matches("^All|Biscayne|University$")) throw new IllegalArgumentException("Invalid campus value: " + campus);
+		if (term == null || !term.matches("^(Spring|Summer|Fall) [0-9]+$")) throw new IllegalArgumentException("Invalid term value: " + term);
+		if (course == null || !course.matches("^[A-Z]{3}[0-9]{4}$")) throw new IllegalArgumentException("Invalid course value: " + course);
+		if (cds == null) throw new IllegalArgumentException("ClassDetailsStub paramater cannot be null");
+		
+		String searchKey = term + " " + course;
+		
+		if (campus.matches("^All|Biscayne$")) {
+			ArrayList<ClassDetailsStub> termCourses = BBC_COURSES.get(searchKey);
+			if (termCourses == null) {
+				termCourses = new ArrayList<ClassDetailsStub>();
+				BBC_COURSES.put(searchKey, termCourses);
+			}
+			termCourses.add(cds);
+		}
+		
+		if (campus.matches("^All|University$")) {
+			ArrayList<ClassDetailsStub> termCourses = MMC_COURSES.get(searchKey);
+			if (termCourses == null) {
+				termCourses = new ArrayList<ClassDetailsStub>();
+				MMC_COURSES.put(searchKey, termCourses);
+			}
+			termCourses.add(cds);
+		}
+	}
+	
 	private String catlgNbr, subject;
 	
 	public CourseStub(String subject, String catlgNbr) {
@@ -13,8 +51,22 @@ public class CourseStub {
 	public String getCatlgNbr() { return catlgNbr; }
 	
 	public Collection<ClassDetailsStub> getClasses(String term, Collection<String> campuses) {
-		// TODO
-		throw new UnsupportedOperationException("Not yet implemented!");
+		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
+		String searchKey = term + " " + this.toString();
+		
+		if (campuses.contains("BBC")) {
+			for (ClassDetailsStub cds : BBC_COURSES.get(searchKey)) {
+				courses.add(cds);
+			}
+		}
+		
+		if (campuses.contains("MMC")) {
+			for (ClassDetailsStub cds : MMC_COURSES.get(searchKey)) {
+				courses.add(cds);
+			}
+		}
+		
+		return courses;
 	}
 
     public String getSubject() { return subject; }
