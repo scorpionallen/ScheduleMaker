@@ -112,7 +112,7 @@ public class ScheduleMakerControllerDriver {
 	}
 	
 	/**
-	 * Purpose: Two schedules (that contain distinct classes offered at different times) using an implementation of
+	 * Purpose: Two schedules (that contain distinct courses offered at different times) using an implementation of
 	 *          java.util.Collection (other than ArrayList) should not have a conflict, and no ClassCastException should be thrown.
 	 * Preconditions:
 	 * 		- There exist 2 courses C1 and C2; course C1 meets on Saturdays and course C2 meets on Mondays/Wednesdays/Fridays.
@@ -311,7 +311,7 @@ public class ScheduleMakerControllerDriver {
 	 * Preconditions:
 	 * 		- There exists a course DAT1345 that meets on Saturdays at the Biscayne campus during Spring 2014.
 	 * 		- There exists a ScheduleOptionsStub S that has no preferred days and no courses chosen
-	 * 		  but is searching for courses at BBC during Spring 2014.
+	 * 		  but is searching for courses at Biscayne during Spring 2014.
 	 * 		- There exists a ScheduleMakerController SMC.
 	 * Input: Request a schedule from SMC using S.
 	 * Expected Output: schedulesReturned.size() == 0
