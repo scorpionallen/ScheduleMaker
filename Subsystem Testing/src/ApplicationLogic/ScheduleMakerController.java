@@ -143,7 +143,7 @@ public class ScheduleMakerController {
         {
             course_tmp = new Course(((String) c).substring(0, 3), ((String) c).substring(3));
             Collection<ClassDetails> classes_tmp = course_tmp.getClasses(term, campus);
-            if (classes_tmp.size() > 0)
+            if (classes_tmp.size() >= 0)
             {
 
                 char[] days = SPDays.toCharArray();

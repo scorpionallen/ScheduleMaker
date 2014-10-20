@@ -1,5 +1,6 @@
 package Storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Schedule {
@@ -11,6 +12,7 @@ public class Schedule {
 
     public Schedule(String pantherID)
     {
+    	classes = new ArrayList<ClassDetails>();
         this.pantherID = pantherID;
     }
 
@@ -47,7 +49,19 @@ public class Schedule {
 	{}
 	
 	public void addClass (String id)
-	{}
+	{
+		ClassDetails cd=new ClassDetails();
+		String subject=new String(id.substring(0,3));
+		String catlgnumbr=new String(id.substring(4,8));
+		String days=new String(id.substring(9,16));
+		String from=new String(id.substring(17,22));
+		String to=new String(id.substring(23,28));
+		Time t=new Time(from,to,days);
+		cd.setTime(t);
+		cd.subject=subject;
+		cd.ctlgnumbr=catlgnumbr;
+		classes.add(cd);
+		}
 	
 	public void deleteClass (String id)
 	{}

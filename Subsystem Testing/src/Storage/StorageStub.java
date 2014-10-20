@@ -16,13 +16,13 @@ public class StorageStub {
 		ArrayList<ClassDetails> courses = new ArrayList<>();
 		String searchKey = term + " " + course;
 		
-		if (campuses.contains("BBC")) {
+		if (campuses.contains("Biscayne")) {
 			for (ClassDetails cd : COURSES_BBC.get(searchKey)) {
 				courses.add(cd);
 			}
 		}
 		
-		if (campuses.contains("MMC")) {
+		if (campuses.contains("University")) {
 			for (ClassDetails cd : COURSES_MMC.get(searchKey)) {
 				courses.add(cd);
 			}

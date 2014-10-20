@@ -4,9 +4,12 @@ import java.util.Calendar;
 
 public class ClassDetails {
 	private Time time;
+	public String subject;
+	public String ctlgnumbr;
 	
 	public Time getTime() {
         return time;
+        
     }
 	
 	public boolean hasConflict(ClassDetails cd) {

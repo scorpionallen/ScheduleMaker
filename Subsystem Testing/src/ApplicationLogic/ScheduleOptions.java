@@ -13,7 +13,8 @@ public class ScheduleOptions
     String campus;
     String m, t, w, th, f, s, su;
     Integer gap;
-
+    public void ScheduleOptions(){}
+    
     public String getTerm() {
         return term;
     }
