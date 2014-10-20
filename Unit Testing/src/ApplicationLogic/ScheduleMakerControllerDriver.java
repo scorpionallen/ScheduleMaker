@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Vector;
 
 import org.junit.Test;
 
@@ -225,5 +226,81 @@ public class ScheduleMakerControllerDriver {
 		
 		assertNull(exceptionThrown);
 		assertTrue(balanceGreaterThanZero);
+	}
+	
+	/**
+	 * Purpose: Test the sizeIsOne() method for a Collection that has no elements.
+	 * Preconditions: There exists a ScheduleMakerController SMC.
+	 * Input: An empty Collection.
+	 * Expected Output: sizeIsOne == false
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT07() {
+		// PRECONDITIONS
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<Collection<?>> emptyCollection = new ArrayList<>();
+		
+		// EXPECTED OUTPUT
+		boolean sizeIsOne = smc.sizeIsOne(emptyCollection);
+		assertFalse(sizeIsOne);
+	}
+	
+	/**
+	 * Purpose: Test the sizeIsOne() method for a Collection that has a single element of size 1.
+	 * Preconditions:
+	 * 		- There exists an ArrayList A that contains the integer 100.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: A Collection that contains A.
+	 * Expected Output: sizeIsOne == true
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT08() {
+		// PRECONDITIONS
+		ArrayList<Integer> a = new ArrayList<>();
+		a.add(100);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<Collection<?>> singleElementCollection = new HashSet<>();
+		singleElementCollection.add(a);
+		
+		// EXPECTED OUTPUT
+		boolean sizeIsOne = smc.sizeIsOne(singleElementCollection);
+		assertTrue(sizeIsOne);
+	}
+	
+	/**
+	 * Purpose: Test the sizeIsOne() method for a Collection that has 2 elements, each of size 2.
+	 * Preconditions:
+	 * 		- There exists an ArrayList A1 (that contains the integers 100 and 200)
+	 * 		  and an ArrayList A2 (that contains the integers 150 and 250).
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: A Collection that contains A1 and A2.
+	 * Expected Output: sizeIsOne == false
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT09() {
+		// PRECONDITIONS
+		ArrayList<Integer> a1 = new ArrayList<>();
+		a1.add(100);
+		a1.add(200);
+		
+		ArrayList<Integer> a2 = new ArrayList<>();
+		a2.add(150);
+		a2.add(250);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<Collection<?>> doubleElementCollection = new Vector<>();
+		doubleElementCollection.add(a1);
+		doubleElementCollection.add(a2);
+		
+		// EXPECTED OUTPUT
+		boolean sizeIsOne = smc.sizeIsOne(doubleElementCollection);
+		assertFalse(sizeIsOne);
 	}
 }
