@@ -35,9 +35,12 @@ public class ApplicationLogicDriver {
 			}
 	
 	/*
-	 * method: createSchedule()
-	 * 
-	 * 
+	 * purpose: Testing the method createSchedule(schOpt);
+	 * Preconditions: 
+	 * 				- The Classdetails, coursedetails , campus, term and subject are defined in the storagestub.
+	 * 				- There are ScheduleOptions schOpt object mentioning the search attributes.
+	 * Input: The SchOpt object attributes are defined by calling its memeber functions eg: SchOpt.setTerm(); 
+	 * Expected Output: A Schedule is added to the collection after calling createSchedule() method.
 	 * 
 	 */
 
@@ -81,14 +84,18 @@ public void TEAM3_APPLOGIC_ST02() {
 		Assert.assertTrue(schedules.isEmpty());
 		schedules=facade.createSchedule(schOpt);
 		Assert.assertFalse(schedules.isEmpty());
+		Schedule sch=new Schedule("1231231");
 		
 		
 	}
 	
 	/*
-	 * method: createSchedule()
-	 * 
-	 * 
+	 * purpose: Testing the method createSchedule(term,collection<String> courses,campus,Days);
+	 * Preconditions: 
+	 * 				- The Classdetails, coursedetails , campus, term, time and subject are defined in the storagestub.
+	 * 				- The object attributes for calling the function are defined.
+	 * Input: The different subjects wanting to enrroll and there attibutes are given i.e., University Fall 2014 STN2123,CAP6123,COT5124 and days 1100100 is given as input.  
+	 * Expected Output: A Schedule is added to the collection after calling createSchedule() method.
 	 * 
 	 */
 
@@ -131,7 +138,108 @@ public void TEAM3_APPLOGIC_ST03() {
 		Assert.assertFalse(schedules.isEmpty());
 		
 	}
+	/*
+	 * Purpose: Testing the isLoginValid() method to check the credentials.
+	 * PreConditions:
+	 * 				- There are pantherId and password stored in the StorageStub for implementing Login Credentials.
+	 * 				- The defined PantherId: "1231231" and Password:"abcabc123" stored in storageStub.
+	 * Input: The input is PantherId: "1231231" and password: "abcabc123".
+	 * Expected Output: assertTrue(facade.isLoginValid(pantherId, password)) give true.
+	 */
+	@Test
+	public void TEAM3_APPLOGIC_ST04() {
+		String pantherId="1231231";
+		String password="abcabc123";
+		StorageStub.registerCredentials(pantherId, password);
+		
+		ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+		
+		Assert.assertTrue(facade.isLoginValid(pantherId, password));
+		
+	}
+	/*
+	 * Purpose: Testing the isLoginValid() method to check the credentials.
+	 * PreConditions:
+	 * 				- There are pantherId and password stored in the StorageStub for implementing Login Credentials.
+	 * 				- The defined PantherId: "1231231" and Password:"abcabc123" stored in storageStub.
+	 * Input: The input is PantherId: null and password: "abcabc123".
+	 * Expected Output: Assert.assertFalse(facade.isLoginValid(null, password)); give true. 
+	 * 
+	 * 
+	 */
+	@Test
+	public void TEAM3_APPLOGIC_ST05() {
+		String pantherId="1231231";
+		String password="abcabc123";
+		StorageStub.registerCredentials(pantherId, password);
+		
+		ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+		
+		Assert.assertFalse(facade.isLoginValid(null, password));
+		
+	}
 	
+	/*
+	 * Purpose: Testing the isLoginValid() method to check the credentials.
+	 * PreConditions:
+	 * 				- There are pantherId and password stored in the StorageStub for implementing Login Credentials.
+	 * 				- The defined PantherId: "1231231" and Password:"abcabc123" stored in storageStub.
+	 * Input: The input is PantherId: "1231231" and password: null.
+	 * Expected Output: Assert.assertFalse(facade.isLoginValid(pantherId, null)); give true. 
+	 * 
+	 */
+	@Test
+	public void TEAM3_APPLOGIC_ST06() {
+		String pantherId="1231231";
+		String password="abcabc123";
+		StorageStub.registerCredentials(pantherId, password);
+		
+		ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+		
+		Assert.assertFalse(facade.isLoginValid(pantherId, null));
+		
+	}
+	
+	/*
+	 * Purpose: Testing the isLoginValid() method to check the credentials.
+	 * PreConditions:
+	 * 				- There are pantherId and password stored in the StorageStub for implementing Login Credentials.
+	 * 				- The defined PantherId: "1231231" and Password:"abcabc123" stored in storageStub.
+	 * Input: The input is PantherId: "1242142" and password: abcabc123.
+	 * Expected Output: Assert.assertFalse(facade.isLoginValid("1242142", password)); give true.  
+	 * 
+	 * 
+	 * 
+	 */
+	@Test
+	public void TEAM3_APPLOGIC_ST07() {
+		String pantherId="1231231 ";
+		String password="abcabc123";
+		StorageStub.registerCredentials(pantherId, password);
+		
+		ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+		Assert.assertFalse(facade.isLoginValid("1242142", password));
+		
+	}
+	/*
+	 * Purpose: Testing the isLoginValid() method to check the credentials.
+	 * PreConditions:
+	 * 				- There are pantherId and password stored in the StorageStub for implementing Login Credentials.
+	 * 				- The defined PantherId: "1231231" and Password:"abcabc123" stored in storageStub.
+	 * Input: The input is PantherId: "1231231" and password: abcbac123.
+	 * Expected Output: Assert.assertFalse(facade.isLoginValid(pantherId, "abcbac123")); give true.  
+	 */
+	@Test
+	public void TEAM3_APPLOGIC_ST08() {
+		String pantherId="1231231";
+		String password="abcabc123";
+		StorageStub.registerCredentials(pantherId, password);
+		
+		ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+		
+		Assert.assertFalse(facade.isLoginValid(pantherId, "abcbac123"));
+		
+	}
 	
 	
 	}

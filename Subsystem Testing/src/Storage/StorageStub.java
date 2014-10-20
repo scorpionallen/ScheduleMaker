@@ -17,14 +17,18 @@ public class StorageStub {
 		String searchKey = term + " " + course;
 		
 		if (campuses.contains("Biscayne")) {
-			for (ClassDetails cd : COURSES_BBC.get(searchKey)) {
-				courses.add(cd);
+			if (COURSES_BBC.containsKey(searchKey)) {
+				for (ClassDetails cd : COURSES_BBC.get(searchKey)) {
+					courses.add(cd);
+				}
 			}
 		}
 		
 		if (campuses.contains("University")) {
-			for (ClassDetails cd : COURSES_MMC.get(searchKey)) {
-				courses.add(cd);
+			if (COURSES_MMC.containsKey(searchKey)) {
+				for (ClassDetails cd : COURSES_MMC.get(searchKey)) {
+					courses.add(cd);
+				}
 			}
 		}
 		
