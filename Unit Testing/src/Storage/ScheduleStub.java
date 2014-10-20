@@ -31,5 +31,5 @@ public class ScheduleStub {
 	
 	public void deleteClass(String id) { /* NOT IMPLEMENTED */ }
 	
-    public void addClass(Collection<ClassDetails> classes) { /* NOT IMPLEMENTED */ }
+    public void addClass(Collection<ClassDetailsStub> classes) { /* NOT IMPLEMENTED */ }
 }

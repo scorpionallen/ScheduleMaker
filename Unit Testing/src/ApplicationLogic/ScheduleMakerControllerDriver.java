@@ -7,11 +7,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.junit.Test;
 
 import Storage.ClassDetailsStub;
+import Storage.CourseStub;
 import Storage.ScheduleStub;
 
 public class ScheduleMakerControllerDriver {
@@ -180,7 +182,7 @@ public class ScheduleMakerControllerDriver {
 		}
 		
 		assertNull(exceptionThrown);
-		assertEquals(balance, 0.0d, 0.0d);
+		assertEquals(0.0d, balance, 0.0d);
 	}
 	
 	/**
@@ -302,5 +304,102 @@ public class ScheduleMakerControllerDriver {
 		// EXPECTED OUTPUT
 		boolean sizeIsOne = smc.sizeIsOne(doubleElementCollection);
 		assertFalse(sizeIsOne);
+	}
+	
+	/**
+	 * Purpose: Requesting a schedule using no class search criteria should produce an empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course DAT1345 that meets on Saturdays at the Biscayne campus during Spring 2014.
+	 * 		- There exists a ScheduleOptionsStub S that has no preferred days and no courses chosen
+	 * 		  but is searching for courses at BBC during Spring 2014.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT10() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "Biscayne";
+		String term = "Spring 2014";
+		
+		ClassDetailsStub dat1345 = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		
+		CourseStub.registerCourse(campus, term, dat1345);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setM("0");
+		s.setT("0");
+		s.setW("0");
+		s.setTh("0");
+		s.setF("0");
+		s.setS("0");
+		s.setSu("0");
+		s.setCampus(campus);
+		s.setTerm(term);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Requesting a schedule for 2 courses offered on specific days where only 1 course is available
+	 * 			should produce a schedule that only contains the course offered on the requested days.
+	 * Preconditions:
+	 * 		- There exists a course CEN4012 that meets on Mondays/Wednesdays/Fridays and a course MAC1266
+	 * 		  that meets on Tuesdays/Thursdays; both courses meet at the University campus during term Fall 2014.
+	 * 		- There exists a ScheduleOptionsStub S that has preferred days Mondays/Wednesdays/Fridays chosen and
+	 * 		  is searching for courses CEN4012 and MAC1266 at the University campus for term Fall 2014.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() == 1 and schedulesReturned contains only CEN4012
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT11() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "University";
+		String term = "Fall 2014";
+		
+		ClassDetailsStub cen4012 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
+		ClassDetailsStub mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		
+		CourseStub.registerCourse(campus, term, cen4012);
+		CourseStub.registerCourse(campus, term, mac1266);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setM("1");
+		s.setT("0");
+		s.setW("1");
+		s.setTh("0");
+		s.setF("1");
+		s.setS("0");
+		s.setSu("0");
+		s.setCampus(campus);
+		s.setTerm(term);
+		s.setCourse1(cen4012.getCourse());
+		s.setCourse2(mac1266.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertEquals(1, schedulesReturned.size());
+		for (ScheduleStub ss : schedulesReturned) {
+			assertEquals(ss.getClasses().size(), 1);
+			Iterator<ClassDetailsStub> iterator = ss.getClasses().iterator();
+			while (iterator.hasNext()) {
+				assertTrue(iterator.next().equals(cen4012));
+			}
+		}
 	}
 }

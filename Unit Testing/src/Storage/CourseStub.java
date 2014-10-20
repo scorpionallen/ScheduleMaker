@@ -14,13 +14,12 @@ public class CourseStub {
 		MMC_COURSES.clear();
 	}
 	
-	public static void registerCourse(String campus, String term, String course, ClassDetailsStub cds) {
+	public static void registerCourse(String campus, String term, ClassDetailsStub cds) {
 		if (campus == null || !campus.matches("^All|Biscayne|University$")) throw new IllegalArgumentException("Invalid campus value: " + campus);
 		if (term == null || !term.matches("^(Spring|Summer|Fall) [0-9]+$")) throw new IllegalArgumentException("Invalid term value: " + term);
-		if (course == null || !course.matches("^[A-Z]{3}[0-9]{4}$")) throw new IllegalArgumentException("Invalid course value: " + course);
 		if (cds == null) throw new IllegalArgumentException("ClassDetailsStub paramater cannot be null");
 		
-		String searchKey = term + " " + course;
+		String searchKey = term + " " + cds.getCourse();
 		
 		if (campus.matches("^All|Biscayne$")) {
 			ArrayList<ClassDetailsStub> termCourses = BBC_COURSES.get(searchKey);
@@ -54,13 +53,13 @@ public class CourseStub {
 		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
 		String searchKey = term + " " + this.toString();
 		
-		if (campuses.contains("BBC")) {
+		if (campuses.contains("Biscayne")) {
 			for (ClassDetailsStub cds : BBC_COURSES.get(searchKey)) {
 				courses.add(cds);
 			}
 		}
 		
-		if (campuses.contains("MMC")) {
+		if (campuses.contains("University")) {
 			for (ClassDetailsStub cds : MMC_COURSES.get(searchKey)) {
 				courses.add(cds);
 			}

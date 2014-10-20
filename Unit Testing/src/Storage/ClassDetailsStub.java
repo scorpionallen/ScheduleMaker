@@ -25,15 +25,18 @@ public class ClassDetailsStub {
 	 */
 	public static enum TEST_CONFIG {
 		/** A Monday/Wednesday/Friday class that occurs at the same time as MonWedFri1B. */
-		MonWedFri1A("1010100"),
+		MonWedFri1A("CEN4012", "1010100"),
 		/** Another Monday/Wednesday/Friday class that occurs at the same time as MonWedFri1A. */
-		MonWedFri1B("1010100"),
+		MonWedFri1B("COP1101", "1010100"),
 		/** Another Monday/Wednesday/Friday schedule, offered at a time that does not overlap the other MWF classes. */
-		MonWedFri2("1010100"),
+		MonWedFri2("MAD3512", "1010100"),
 		/** A Saturday only class. */
-		SatOnly("0000010"),
+		SatOnly("DAT1345", "0000010"),
 		/** A Tuesday/Thursday class. */
-		TueThu("0101000");
+		TueThu("MAC1266", "0101000");
+		
+		/** Internal storage for the course a particular configuration represents. */
+		private final String course;
 		
 		/** Internal storage for the days a particular configuration represents. */
 		private final String days;
@@ -46,13 +49,16 @@ public class ClassDetailsStub {
 		 * @throws NullPointerException if the parameter is null or empty
 		 * @throws IllegalArgumentException if the parameter does not match the regex ^[01]{7}$
 		 */
-		private TEST_CONFIG(String days) {
+		private TEST_CONFIG(String course, String days) {
 			if (days == null || days.equals("")) {
 				throw new NullPointerException("Constructor paramater cannot be null or empty");
 			} else if (!days.matches("^[01]{7}$")) {
 				throw new IllegalArgumentException("Expected 7-character string containing only 0s and 1s: " + days);
+			} else if (course == null || course.equals("")) {
+				throw new IllegalArgumentException("Course parameter cannot be empty or null");
 			}
 			
+			this.course = course;
 			this.days = days;
 		}
 	}
@@ -87,6 +93,13 @@ public class ClassDetailsStub {
 		
 		this.config = config;
 	}
+	
+	/**
+	 * Accessor method for the course; format is the 3-character subject area and the 4-digit catalog number.
+	 * 
+	 * @return a String representing the course being offered
+	 */
+	public String getCourse() { return this.config.course; }
 	
 	/**
 	 * This method enumerates (using a single String object) the days of the week a course
