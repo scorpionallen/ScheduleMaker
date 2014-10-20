@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ClassDetails {
-    private CourseStub course;
-    private String classNbr;
-    private ProfessorStub instructor;
-    private String bldg_room;
-    private String campus;
-    private String term;
-    private TimeStub time;
+    public CourseStub course;
+    public String classNbr;
+    public ProfessorStub instructor;
+    public String bldg_room;
+    public String campus;
+    public String term;
+    public TimeStub time;
     
     //constructors
     public ClassDetails() { }
