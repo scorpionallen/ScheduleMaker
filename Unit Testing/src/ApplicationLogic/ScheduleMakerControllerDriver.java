@@ -16,99 +16,130 @@ import Storage.ScheduleStub;
 public class ScheduleMakerControllerDriver {
 	/**
 	 * Purpose: A schedule should conflict with itself.
-	 * Preconditions: There exists a schedule containing a single course and a ScheduleMakerController object.
-	 * Input: A Collection of 2 ArrayLists; each ArrayList has the same ClassDetailsStub object.
-	 * Expected Output: hasConflict() == true
+	 * Preconditions:
+	 * 		- There exists a single course C that meets on Mondays/Wednesdays/Fridays.
+	 * 		- There exists a schedule S, containing course C.
+	 * 		- There exists a ScheduleMakerController object SMC.
+	 * Input: A Collection that contains 2 references to schedule S.
+	 * Expected Output: schedulesConflict == true
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT01() {
+		// PRECONDITIONS
+		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
+		
+		ArrayList<ClassDetailsStub> s = new ArrayList<>();
+		s.add(c);
+		
 		ScheduleMakerController smc = new ScheduleMakerController();
-		ClassDetailsStub MWFclassSchedule = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
+		
+		// INPUT
 		Collection<ArrayList<ClassDetailsStub>> sameSchedules = new ArrayList<>();
-		ArrayList<ClassDetailsStub> schedule1 = new ArrayList<>(),
-				schedule2 = new ArrayList<>();
+		sameSchedules.add(s);
+		sameSchedules.add(s);
 		
-		schedule1.add(MWFclassSchedule);
-		schedule2.add(MWFclassSchedule);
-		
-		sameSchedules.add(schedule1);
-		sameSchedules.add(schedule2);
-		
-		assertTrue(smc.conflict(sameSchedules));
+		// EXPECTED OUTPUT
+		boolean schedulesConflict = smc.conflict(sameSchedules);
+		assertTrue(schedulesConflict);
 	}
 	
 	/**
-	 * Purpose: A schedule containing a single class should have no conflict.
-	 * Preconditions: There exists a schedule containing a single course and a ScheduleMakerController object.
-	 * Input: A Collection of 1 ArrayList, containing the single schedule.
-	 * Expected Output: hasConflict() == false
+	 * Purpose: A schedule containing a single course should have no conflict.
+	 * Preconditions:
+	 * 		- There exists a single course C that meets only on Saturdays.
+	 * 		- There exists a schedule S, containing course C.
+	 * 		- There exists a ScheduleMakerController object SMC.
+	 * Input: A Collection containing the single schedule S.
+	 * Expected Output: schedulesConflict == false
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT02() {
+		// PRECONDITIONS
+		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		
+		ArrayList<ClassDetailsStub> s = new ArrayList<>();
+		s.add(c);
+		
 		ScheduleMakerController smc = new ScheduleMakerController();
-		ClassDetailsStub SatClassSchedule = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		
+		// INPUT
 		Collection<ArrayList<ClassDetailsStub>> oneSchedule = new ArrayList<>();
-		ArrayList<ClassDetailsStub> schedule1 = new ArrayList<>();
+		oneSchedule.add(s);
 		
-		schedule1.add(SatClassSchedule);
-		oneSchedule.add(schedule1);
-		
-		assertFalse(smc.conflict(oneSchedule));
+		// EXPECTED OUTPUT
+		boolean schedulesConflict = smc.conflict(oneSchedule);
+		assertFalse(schedulesConflict);
 	}
 	
 	/**
-	 * Purpose: Two different schedules (containing 2 classes each) that share a common course should have a conflict.
-	 * Preconditions: There exists a ScheduleMakerController object and 2 different schedules A and B, where schedule A
-	 * 				  has classes X and Y (X and Y are distinct and do not conflict) and schedule B has classes Z and Y
-	 * 				  (Z and Y are distinct and do not conflict).
-	 * Input: A Collection of 2 ArrayLists, containing schedules A and B.
-	 * Expected Output: hasConflict() == true
+	 * Purpose: Two different schedules (containing 2 courses each) that share a common course should have a conflict.
+	 * Preconditions:
+	 * 		- There exist 3 courses C1, C2 and C3; course C1 meets on Saturdays, course C2 meets on Mondays/Wednesdays/Fridays,
+	 * 		  and course C3 meets on Tuesdays/Thursdays.
+	 * 		- There exist 2 schedules S1 and S2, where schedule S1 contains courses C1 and C3 and schedule S2 contains courses C2 and C3.
+	 * 		- There exists a ScheduleMakerController object SMC.
+	 * Input: A Collection containing schedules S1 and S2.
+	 * Expected Output: schedulesConflict == true
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT03() {
+		// PRECONDITIONS
+		ClassDetailsStub c1 = new ClassDetailsStub(TEST_CONFIG.SatOnly),
+						 c2 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2),
+						 c3 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		
+		ArrayList<ClassDetailsStub> s1 = new ArrayList<>();
+		s1.add(c1);
+		s1.add(c3);
+		
+		ArrayList<ClassDetailsStub> s2 = new ArrayList<>();
+		s2.add(c2);
+		s2.add(c3);
+		
 		ScheduleMakerController smc = new ScheduleMakerController();
-		ClassDetailsStub classX = new ClassDetailsStub(TEST_CONFIG.SatOnly),
-						 classY = new ClassDetailsStub(TEST_CONFIG.MonWedFri2),
-						 classZ = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		
+		// INPUT
 		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new ArrayList<>();
-		ArrayList<ClassDetailsStub> scheduleA = new ArrayList<>(),
-									scheduleB = new ArrayList<>();
+		twoSchedules.add(s1);
+		twoSchedules.add(s2);
 		
-		scheduleA.add(classX);
-		scheduleA.add(classY);
-		scheduleB.add(classZ);
-		scheduleB.add(classY);
-		twoSchedules.add(scheduleA);
-		twoSchedules.add(scheduleB);
-		
-		assertTrue(smc.conflict(twoSchedules));
+		// EXPECTED OUTPUT
+		boolean schedulesConflict = smc.conflict(twoSchedules);
+		assertTrue(schedulesConflict);
 	}
 	
 	/**
-	 * Purpose: Two schedules (that contain distinct classes offered at different times)
-	 *          using an implementation of java.util.Collection (other than ArrayList)
-	 *          should not have a conflict, and no ClassCastException should be thrown.
-	 * Preconditions: There exists a ScheduleMakerController object and 2 different schedules A and B, where schedule A
-	 * 				  has class X and schedule B has class Y (X and Y are distinct and do not conflict).
-	 * Input: A Collection of 2 ArrayLists, containing schedules A and B (the runtime type of the Collection is NOT ArrayList).
-	 * Expected Output: hasConflict() == false and exceptionThrown == null
+	 * Purpose: Two schedules (that contain distinct classes offered at different times) using an implementation of
+	 *          java.util.Collection (other than ArrayList) should not have a conflict, and no ClassCastException should be thrown.
+	 * Preconditions:
+	 * 		- There exist 2 courses C1 and C2; course C1 meets on Saturdays and course C2 meets on Mondays/Wednesdays/Fridays.
+	 * 		- There exist 2 schedules S1 and S2, where schedule S1 contains course C1 and schedule S2 contains course C2.
+	 * 		- There exists a ScheduleMakerController object SMC.
+	 * Input: A Collection containing schedules S1 and S2 (the runtime type of the Collection is NOT ArrayList).
+	 * Expected Output: schedulesConflict == false and exceptionThrown == null
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT04() {
+		// PRECONDITIONS
+		ClassDetailsStub c1 = new ClassDetailsStub(TEST_CONFIG.SatOnly),
+						 c2 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
+		
+		ArrayList<ClassDetailsStub> s1 = new ArrayList<>();
+		s1.add(c1);
+		
+		ArrayList<ClassDetailsStub> s2 = new ArrayList<>();
+		s2.add(c2);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<>();
+		twoSchedules.add(s1);
+		twoSchedules.add(s2);
+		
+		// EXPECTED OUTPUT
 		Exception exceptionThrown = null;
 		boolean schedulesConflict = false;
-		ScheduleMakerController smc = new ScheduleMakerController();
-		ClassDetailsStub classX = new ClassDetailsStub(TEST_CONFIG.SatOnly),
-						 classY = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
-		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<>();
-		ArrayList<ClassDetailsStub> scheduleA = new ArrayList<>(),
-									scheduleB = new ArrayList<>();
-		
-		scheduleA.add(classX);
-		scheduleB.add(classY);
-		twoSchedules.add(scheduleA);
-		twoSchedules.add(scheduleB);
-		
 		try {
 			schedulesConflict = smc.conflict(twoSchedules);
 		} catch (ClassCastException cce) {
@@ -121,23 +152,25 @@ public class ScheduleMakerControllerDriver {
 	
 	/**
 	 * Purpose: The balance of an empty schedule should be 0 (zero).
-	 * Preconditions: There exists a ScheduleMakerController object with no saved schedules.
-	 * Input: An empty Collection, indicating no saved schedules.
-	 * Expected Output: getBalance() == 0.0 and exceptionThrown == null
+	 * Preconditions: There exists a ScheduleMakerController SMC that has no previously saved schedules.
+	 * Input: An empty Collection (indicating no schedules) is saved.
+	 * Expected Output: balance == 0.0 and exceptionThrown == null
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT05() {
+		// PRECONDITIONS
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+		smc.saveSchedules(savedSchedules);
+		
+		// EXPECTED OUTPUT
 		Exception exceptionThrown = null;
 		double balance = 0.0d;
-		
 		try {
-			ScheduleMakerController smc = new ScheduleMakerController();
-			Collection<ScheduleStub> savedSchedules = new ArrayList<>();
-			Object balanceObj = null;
 			Method getBalance = smc.getClass().getDeclaredMethod("getBalance", (Class<?> []) null);
-			
-			smc.saveSchedules(savedSchedules);
-			balanceObj = getBalance.invoke(smc, (Object[]) null);
+			Object balanceObj = getBalance.invoke(smc, (Object[]) null);
 			
 			if (balanceObj == null) throw new NullPointerException("getBalance() returned null; expected a number");
 			else if (!(balanceObj instanceof Number)) throw new RuntimeException("getBalance() did not return a number");
@@ -151,18 +184,31 @@ public class ScheduleMakerControllerDriver {
 	
 	/**
 	 * Purpose: The balance of a non-empty schedule should be greater than 0 (zero).
-	 * Preconditions: There exists a ScheduleMakerController object with no saved schedules and a non-empty schedule to save.
-	 * Input: A Collection containing the single schedule to save; the schedule has a single course in it.
-	 * Expected Output: getBalance() > 0.0 and exceptionThrown == null
+	 * Preconditions:
+	 * 		- There exists a course C that meets on Tuesdays/Thursdays.
+	 * 		- There exists a schedule S that contains course C.
+	 * 		- There exists a ScheduleMakerController SMC that has no previously saved schedules.
+	 * Input: A Collection containing schedule S is saved.
+	 * Expected Output: balance > 0.0 and exceptionThrown == null
 	 */
 	@Test
 	public void TEAM3_CONTROLLER_UT06() {
+		// PRECONDITIONS
+		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		
+		Collection<ClassDetailsStub> s = new ArrayList<>();
+		s.add(c);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+		savedSchedules.add(new ScheduleStub(s));
+		
+		// EXPECTED OUTPUT
 		Exception exceptionThrown = null;
 		boolean balanceGreaterThanZero = false;
-		
 		try {
-			ScheduleMakerController smc = new ScheduleMakerController();
-			Collection<ScheduleStub> savedSchedules = new ArrayList<>();
 			Object balanceObj = null;
 			Method getBalance = smc.getClass().getDeclaredMethod("getBalance", (Class<?> []) null);
 			

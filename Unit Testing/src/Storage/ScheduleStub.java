@@ -5,13 +5,13 @@ import java.util.Collection;
 public class ScheduleStub {
 	private String id;
     private String pantherID;
-    private Collection<ClassDetails> classes;
+    private Collection<ClassDetailsStub> classes;
     
     public ScheduleStub(String pantherID) {
         this.pantherID = pantherID;
     }
     
-    public ScheduleStub(Collection<ClassDetails> classes) {
+    public ScheduleStub(Collection<ClassDetailsStub> classes) {
         this.classes = classes;
     }
     
@@ -23,7 +23,7 @@ public class ScheduleStub {
     
     public void setPantherID(String pantherID) { this.pantherID = pantherID; }
     
-	public Collection<ClassDetails> getClasses() { return classes; }
+	public Collection<ClassDetailsStub> getClasses() { return classes; }
 	
 	public void combine(String id) { /* NOT IMPLEMENTED */ }
 	
