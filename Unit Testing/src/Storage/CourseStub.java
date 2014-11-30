@@ -27,7 +27,15 @@ public class CourseStub {
 				termCourses = new ArrayList<ClassDetailsStub>();
 				BBC_COURSES.put(searchKey, termCourses);
 			}
-			termCourses.add(cds);
+			
+			ClassDetailsStub toAdd;
+			if (cds.campus.equals("Biscayne")) toAdd = cds;
+			else {
+				toAdd = cds.clone();
+				toAdd.campus = "Biscayne";
+			}
+			
+			termCourses.add(toAdd);
 		}
 		
 		if (campus.matches("^All|University$")) {
@@ -36,7 +44,15 @@ public class CourseStub {
 				termCourses = new ArrayList<ClassDetailsStub>();
 				MMC_COURSES.put(searchKey, termCourses);
 			}
-			termCourses.add(cds);
+			
+			ClassDetailsStub toAdd;
+			if (cds.campus.equals("University")) toAdd = cds;
+			else {
+				toAdd = cds.clone();
+				toAdd.campus = "University";
+			}
+			
+			termCourses.add(toAdd);
 		}
 	}
 	
@@ -53,13 +69,13 @@ public class CourseStub {
 		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
 		String searchKey = term + " " + this.toString();
 		
-		if (campuses.contains("Biscayne")) {
+		if (campuses.contains("Biscayne") && BBC_COURSES.get(searchKey) != null) {
 			for (ClassDetailsStub cds : BBC_COURSES.get(searchKey)) {
 				courses.add(cds);
 			}
 		}
 		
-		if (campuses.contains("University")) {
+		if (campuses.contains("University") && MMC_COURSES.get(searchKey) != null) {
 			for (ClassDetailsStub cds : MMC_COURSES.get(searchKey)) {
 				courses.add(cds);
 			}

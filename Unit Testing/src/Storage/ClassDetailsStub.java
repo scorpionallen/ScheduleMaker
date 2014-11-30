@@ -79,6 +79,12 @@ public class ClassDetailsStub {
 		CONFLICTING_CONFIGURATIONS.get(TEST_CONFIG.MonWedFri1B).add(TEST_CONFIG.MonWedFri1A);
 	}
 	
+	/** Optional field for specifying which campus this course is offered at. */
+	public String campus = "";
+	
+	/** Optional field for specifying which term this course is offered during. */
+	public String term = "";
+	
 	/** The (readonly) configuration of this particular ClassDetailsStub object. */
 	private final TEST_CONFIG config;
 	
@@ -92,6 +98,16 @@ public class ClassDetailsStub {
 		if (config == null) throw new NullPointerException("Config parameter cannot be null");
 		
 		this.config = config;
+	}
+	
+	@Override
+	public ClassDetailsStub clone() {
+		ClassDetailsStub theClone = new ClassDetailsStub(this.config);
+		
+		theClone.campus = this.campus;
+		theClone.term = this.term;
+		
+		return theClone;
 	}
 	
 	/**
