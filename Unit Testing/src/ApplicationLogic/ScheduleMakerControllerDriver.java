@@ -402,4 +402,597 @@ public class ScheduleMakerControllerDriver {
 			}
 		}
 	}
+	
+	/**
+	 * Purpose: Requesting a schedule for a course offered at both campuses should produce 2 schedules,
+	 *          1 for each campus.
+	 * Preconditions:
+	 * 		- There exists a course DAT1345 that meets at the same time on Saturdays at both the University
+	 *        and Biscayne campuses during term Spring 2015.
+	 * 		- There exists a ScheduleOptionsStub S that has no preferred days chosen and
+	 * 		  is searching for course DAT1345 at any campus for term Spring 2015.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() == 2, where each schedule contains the course DAT1345 at
+	 *                  the same date and time, but one schedule is for the Biscayne campus and the other
+	 *                  is for the University campus.
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT12() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "All";
+		String term = "Spring 2015";
+		
+		ClassDetailsStub dat1345 = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		
+		CourseStub.registerCourse("Biscayne", term, dat1345);
+		CourseStub.registerCourse("University", term, dat1345);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setCampus(campus);
+		s.setTerm(term);
+		s.setCourse3(dat1345.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertEquals(2, schedulesReturned.size());
+		
+		boolean biscayneFound = false,
+				universityFound = false;
+		for (ScheduleStub ss : schedulesReturned) {
+			assertEquals(1, ss.getClasses().size());
+			
+			ArrayList<ClassDetailsStub> courses = (ArrayList<ClassDetailsStub>)((ArrayList)ss.getClasses()).get(0);
+			assertEquals(1, courses.size());
+			
+			ClassDetailsStub course = courses.get(0); 
+			assertEquals(course.getCourse(), dat1345.getCourse());
+			
+			if (course.campus.equals("Biscayne")) biscayneFound = true;
+			if (course.campus.equals("University")) universityFound = true;
+		}
+		assertTrue(biscayneFound);
+		assertTrue(universityFound);
+	}
+	
+	/**
+	 * Purpose: Requesting a schedule for a term that does not contain any courses should produce an empty schedule.
+	 * Preconditions:
+	 * 		- There are no courses that meet at either campus during term Spring 2015.
+	 * 		- There exists a ScheduleOptionsStub S that has no preferred days chosen and
+	 * 		  is searching for course DAT1345 at any campus for term Spring 2015.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT13() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "All";
+		String term = "Spring 2015";
+		
+		ClassDetailsStub dat1345 = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setCampus(campus);
+		s.setTerm(term);
+		s.setCourse4(dat1345.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Requesting a schedule for a class that is offered at a campus other than
+	 *          the requested campus should produce an empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course COP1101 that meets on Mondays/Wednesdays/Fridays at the Biscayne
+	 *        campus for term Spring 2015.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using the term, campus, preferred days, and list of courses.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT14() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "University";
+		String preferredDays = "1010100";
+		String term = "Spring 2015";
+		
+		ClassDetailsStub cop1101 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1B);
+		CourseStub.registerCourse("Biscayne", term, cop1101);
+		
+		ArrayList<String> courses = new ArrayList<>();
+		courses.add(cop1101.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(term, courses, campus, preferredDays);
+		
+		// EXPECTED OUTPUT
+		assertTrue(schedulesReturned.isEmpty());
+	}
+	
+	/**
+	 * Purpose: Requesting a schedule for 2 classes offered at different times on the same days at
+	 *          both campuses should produce 4 schedules (the possible combinations of classes and campuses).
+	 * Preconditions:
+	 * 		- There exists a course MAD3512 that meets on Mondays/Wednesdays/Fridays at all campuses for
+	 *        term Spring 2015, and a class COP1101 that meets on the same days but at a different time than
+	 *        MAD3512 and is also offered at all campuses.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using term 'Spring 2015', any campus, all preferred days,
+	 *        and a list containing the 2 courses COP1101 and MAD3512.
+	 * Expected Output: schedulesReturned.size() == 4, containing each of these schedules:
+	 *                  - COP1101 and MAD3512 at the Biscayne campus
+	 *                  - COP1101 and MAD3512 at the University campus
+	 *                  - COP1101 at the Biscayne campus and MAD3512 at the University campus
+	 *                  - COP1101 at the University campus and MAD3512 at the Biscayne campus
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT15() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "All";
+		String preferredDays = "1111111";
+		String term = "Spring 2015";
+		
+		ClassDetailsStub cop1101 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1B);
+		ClassDetailsStub mad3512 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
+		CourseStub.registerCourse("All", term, cop1101);
+		CourseStub.registerCourse("All", term, mad3512);
+		
+		ArrayList<String> courses = new ArrayList<>();
+		courses.add(cop1101.getCourse());
+		courses.add(mad3512.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		ArrayList<ScheduleStub> schedulesReturned = (ArrayList<ScheduleStub>) smc.createSchedule(term, courses, campus, preferredDays);
+		
+		// EXPECTED OUTPUT
+		assertEquals(4, schedulesReturned.size());
+		
+		boolean classCombo1found = false,
+				classCombo2found = false,
+				classCombo3found = false,
+				classCombo4found = false;
+		for (ScheduleStub schedule : schedulesReturned) {
+			boolean cop1101found = false,
+					mad3512found = false;
+			String cop1101campus = "",
+				   mad3512campus = "";
+			
+			assertEquals(2, schedule.getClasses().size());
+			
+			for (Object o : schedule.getClasses()) {
+				ClassDetailsStub cds = ((ArrayList<ClassDetailsStub>) o).get(0);
+				if (cds.getCourse().equals(cop1101.getCourse())) {
+					cop1101found = true;
+					cop1101campus = cds.campus;
+				}
+				if (cds.getCourse().equals(mad3512.getCourse())) {
+					mad3512found = true;
+					mad3512campus = cds.campus;
+				}
+			}
+			
+			assertTrue(cop1101found);
+			assertTrue(mad3512found);
+			
+			if (cop1101campus.equals("Biscayne") && mad3512campus.equals("Biscayne")) classCombo1found = true;
+			if (cop1101campus.equals("University") && mad3512campus.equals("University")) classCombo2found = true;
+			if (cop1101campus.equals("University") && mad3512campus.equals("Biscayne")) classCombo3found = true;
+			if (cop1101campus.equals("Biscayne") && mad3512campus.equals("University")) classCombo4found = true;
+		}
+		assertTrue(classCombo1found);
+		assertTrue(classCombo2found);
+		assertTrue(classCombo3found);
+		assertTrue(classCombo4found);
+	}
+	
+	/**
+	 * Purpose: Making a request for a schedule that does not specify any course information should return an empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course MAD3512 that meets on Mondays/Wednesdays/Fridays at all campuses for term Fall 2014.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using term 'Fall 2014', any campus, all preferred days, and an empty course list.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT16() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "All";
+		String preferredDays = "1111111";
+		String term = "Fall 2014";
+		
+		ClassDetailsStub mad3512 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
+		CourseStub.registerCourse("All", term, mad3512);
+		
+		ArrayList<String> courses = new ArrayList<>();
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		ArrayList<ScheduleStub> schedulesReturned = (ArrayList<ScheduleStub>) smc.createSchedule(term, courses, campus, preferredDays);
+		
+		// EXPECTED OUTPUT
+		assertEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Making a request for a schedule using empty course codes should return an empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course MAC1266 that meets on Tuesdays/Thursdays at all campuses for term Spring 2015.
+	 *      - There exists a ScheduleOptionsStub S that requests all campuses and term Spring 2015,
+	 *        but uses empty strings for all 6 course fields.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT17() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String term = "Spring 2015";
+		
+		ClassDetailsStub mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		CourseStub.registerCourse("All", term, mac1266);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setCampus("All");
+		s.setTerm(term);
+		s.setCourse1("");
+		s.setCourse2("");
+		s.setCourse3("");
+		s.setCourse4("");
+		s.setCourse5("");
+		s.setCourse6("");
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Making a request for a schedule using SearchOptions course fields other than the
+	 *          first one should return a non-empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course MAC1266 that meets on Tuesdays/Thursdays at the Biscayne campus
+	 *        for term Spring 2015, and there exists a course DAT1345 that meets on Saturdays at the University
+	 *        campus during the same term.
+	 *      - There exists a ScheduleOptionsStub S that requests all campuses and term Spring 2015, no preferred
+	 *        days, but requests DAT1345 using course field 5 and requests MAC1266 using course field 6.
+	 * 		- There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using S.
+	 * Expected Output: schedulesReturned.size() != 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT18() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String term = "Spring 2015";
+		
+		ClassDetailsStub mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu),
+				         dat1345 = new ClassDetailsStub(TEST_CONFIG.SatOnly);
+		CourseStub.registerCourse("Biscayne", term, mac1266);
+		CourseStub.registerCourse("University", term, dat1345);
+		
+		ScheduleOptionsStub s = new ScheduleOptionsStub();
+		s.setCampus("All");
+		s.setTerm(term);
+		s.setCourse1("");
+		s.setCourse2("");
+		s.setCourse3("");
+		s.setCourse4("");
+		s.setCourse5(dat1345.getCourse());
+		s.setCourse6(mac1266.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(s);
+		
+		// EXPECTED OUTPUT
+		assertNotEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Making a request for a schedule using non-existent course codes should return an empty schedule.
+	 * Preconditions:
+	 * 		- There exists a course MAC1266 that meets on Tuesdays/Thursdays at all campuses for term Spring 2015.
+	 *      - There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using term 'Spring 2015', course codes '' (empty string) and 'XYZ9999',
+	 *        for all campuses and any day.
+	 * Expected Output: schedulesReturned.size() == 0
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT19() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "All",
+			   preferredDays = "1111111",
+			   term = "Spring 2015";
+		
+		ClassDetailsStub mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		CourseStub.registerCourse(campus, term, mac1266);
+		
+		Collection<String> courses = new ArrayList<>();
+		courses.add("");
+		courses.add("XYZ9999");
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(term, courses, campus, preferredDays);
+		
+		// EXPECTED OUTPUT
+		assertEquals(0, schedulesReturned.size());
+	}
+	
+	/**
+	 * Purpose: Making a request for a schedule that does not include a day that the requested course is
+	 *          offered on should not return the requested class in the schedule.
+	 * Preconditions:
+	 * 		- There exists a course MAC1266 that meets on Tuesdays/Thursdays at all campuses for term Spring 2015,
+	 *        and there exists a course COP1101 that meets on Mondays/Wednesdays/Fridays at the University campus for term Spring 2015.
+	 *      - There exists a ScheduleMakerController SMC.
+	 * Input: Request a schedule from SMC using term 'Spring 2015', course codes 'COP1101' and 'MAC1266',
+	 *        for all campuses and preferred days Mondays/Tuesdays/Wednesdays/Fridays.
+	 * Expected Output: mac1266returned == false
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT20() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String requestedCampus = "All",
+			   preferredDays = "1110100",
+			   term = "Spring 2015";
+		
+		ClassDetailsStub cop1101 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1B),
+						 mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		CourseStub.registerCourse("University", term, cop1101);
+		CourseStub.registerCourse("All", term, mac1266);
+		
+		Collection<String> courses = new ArrayList<>();
+		courses.add(cop1101.getCourse());
+		courses.add(mac1266.getCourse());
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+		
+		// INPUT
+		Collection<ScheduleStub> schedulesReturned = smc.createSchedule(term, courses, requestedCampus, preferredDays);
+		
+		// EXPECTED OUTPUT
+		boolean mac1266returned = false;
+		for (ScheduleStub schedule : schedulesReturned) {
+			for (Object o : schedule.getClasses()) {
+				ArrayList<ClassDetailsStub> coursesInSchedule = (ArrayList<ClassDetailsStub>) o;
+				
+				for (ClassDetailsStub cds : coursesInSchedule) {
+					if (cds.getCourse().equals(mac1266.getCourse())) mac1266returned = true;
+				}
+			}
+		}
+		assertFalse(mac1266returned);
+	}
+	
+	/**
+	 * Purpose: Calling findClass() using an existing subject should return the classes matching that subject code.
+	 * Preconditions:
+	 * 		- There exist two courses CEN4012 and COP1101 that meet on Mondays/Wednesdays/Fridays at the
+	 *        University campus during term Summer 2015.
+	 *      - There exists a ScheduleMakerController SMC.
+	 * Input: Search for classes in the subject 'CEN' using SMC.
+	 * Expected Output: classesReturned.size() == 1 and the course is CEN4012; no exceptions are thrown
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT21() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "University",
+			   subject = "CEN",
+			   term = "Summer 2015";
+		
+		ClassDetailsStub cen4012 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A),
+						 cop1101 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1B);
+		CourseStub.registerCourse(campus, term, cen4012);
+		CourseStub.registerCourse(campus, term, cop1101);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+
+		// INPUT
+		Exception exceptionThrown = null;
+		ArrayList<ClassDetailsStub> classesReturned = null;
+		try {
+			// ideally, the method would accept some parameter(s) to specify what subject(s) to search for...
+			Method findClasses = smc.getClass().getDeclaredMethod("findClasses", (Class<?> []) null);
+			Object methodReturnObject = findClasses.invoke(smc, (Object []) null);
+			
+			if (methodReturnObject == null) throw new NullPointerException("findClasses() returned null; expected a Collection");
+			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("findClasses() did not return a Collection");
+			
+			classesReturned = new ArrayList<>( ((Collection<ClassDetailsStub>) methodReturnObject) );
+		} catch (Exception ex) {
+			exceptionThrown = ex;
+		}
+		
+		// EXPECTED OUTPUT
+		assertNull(exceptionThrown);
+		assertNotNull(classesReturned);
+		assertEquals(1, classesReturned.size());
+		assertEquals(cen4012.getCourse(), classesReturned.get(0).getCourse());
+	}
+	
+	/**
+	 * Purpose: After calling saveSchedule(), the same schedule should be retrieved using getSavedSchedule().
+	 * Preconditions:
+	 * 		- There exists a course CEN4012 that meets on Mondays/Wednesdays/Fridays at the Biscayne campus during term Spring 2015.
+	 *      - There exists a ScheduleStub S that has id 'MySchedule' for student 1412412 and contains CEN4012.
+	 *      - There exists a ScheduleMakerController SMC.
+	 * Input: S is saved using SMC.saveSchedules(), then ScheduleStub S2 is obtained by calling SMC.getSavedSchedule()
+	 * Expected Output: the id of S2 is equal to the id of S; the PantherID of S2 is equal to the PantherID of S;
+	 *                  the class list of S and S2 each contain only CEN4012; no exception is thrown
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT22() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String campus = "Biscayne",
+			   pantherID = "1412412",
+			   scheduleID = "MySchedule",
+			   term = "Spring 2015";
+		
+		ClassDetailsStub cen4012 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
+		CourseStub.registerCourse(campus, term, cen4012);
+		
+		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
+		courses.add(cen4012);
+		
+		ScheduleStub s = new ScheduleStub(courses);
+		s.setId(scheduleID);
+		s.setPantherID(pantherID);
+		
+		ArrayList<ScheduleStub> scheduleList = new ArrayList<>();
+		scheduleList.add(s);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+
+		// INPUT
+		Exception exceptionThrown = null;
+		try {
+			smc.saveSchedules(scheduleList);
+			
+			Method getSavedSchedule = smc.getClass().getDeclaredMethod("getSavedSchedule", (Class<?> []) null);
+			Object methodReturnObject = getSavedSchedule.invoke(smc, (Object []) null);
+			
+			// EXPECTED OUTPUT
+			
+			if (methodReturnObject == null) throw new NullPointerException("getSavedSchedule() returned null; expected a Collection");
+			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("getSavedSchedule() did not return a Collection");
+			
+			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<>( ((Collection<ScheduleStub>) methodReturnObject) );
+			assertEquals(1, schedulesReturned.size());
+			
+			ScheduleStub s2 = schedulesReturned.get(0);
+			assertNotNull(s2);
+			assertEquals(s.getId(), s2.getId());
+			assertEquals(s.getPantherID(), s2.getPantherID());
+			assertEquals(1, s2.getClasses().size());
+			assertEquals(cen4012.getCourse(), ((ArrayList<ClassDetailsStub>)s2.getClasses()).get(0).getCourse());
+		} catch (Exception ex) {
+			exceptionThrown = ex;
+		}
+		
+		assertNull(exceptionThrown);
+	}
+	
+	/**
+	 * Purpose: Calling sortSchedules() after giving a list of unsorted schedules should return the same schedules sorted by ID.
+	 * Preconditions:
+	 * 		- There exists a course CEN4012 that meets on Mondays/Wednesdays/Fridays at the Biscayne campus during term Spring 2015
+	 *        and there exists a course MAC1266 that meets Tuesdays/Thursdays at the University campus during term Spring 2015.
+	 *      - There exists a ScheduleStub S1 that has id 'Schedule1' for student 1412412 and contains CEN4012 and
+	 *        there exists a ScheduleStub S2 that has id 'Schedule2' for the same student, containing MAC1266.
+	 *      - There exists a ScheduleMakerController SMC.
+	 * Input: S2 and S1 are saved (in that order) using SMC.saveSchedules(), then SMC.sortSchedules() is called.
+	 * Expected Output: the returned schedules list contains S1 first and then S2; no exception is thrown
+	 */
+	@Test
+	public void TEAM3_CONTROLLER_UT23() {
+		// PRECONDITIONS
+		CourseStub.initializeCourses();
+		
+		String pantherID = "1412412",
+			   term = "Spring 2015";
+		
+		ClassDetailsStub cen4012 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A),
+						 mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
+		CourseStub.registerCourse("Biscayne", term, cen4012);
+		CourseStub.registerCourse("University", term, mac1266);
+		
+		ArrayList<ClassDetailsStub> courses1 = new ArrayList<>();
+		courses1.add(cen4012);
+		
+		ArrayList<ClassDetailsStub> courses2 = new ArrayList<>();
+		courses1.add(mac1266);
+		
+		ScheduleStub s1 = new ScheduleStub(courses1);
+		s1.setId("Schedule1");
+		s1.setPantherID(pantherID);
+		
+		ScheduleStub s2 = new ScheduleStub(courses2);
+		s1.setId("Schedule2");
+		s1.setPantherID(pantherID);
+		
+		ArrayList<ScheduleStub> scheduleList = new ArrayList<>();
+		scheduleList.add(s2);
+		scheduleList.add(s1);
+		
+		ScheduleMakerController smc = new ScheduleMakerController();
+
+		// INPUT
+		Exception exceptionThrown = null;
+		try {
+			smc.saveSchedules(scheduleList);
+			
+			Method sortSchedules = smc.getClass().getDeclaredMethod("sortSchedules", (Class<?> []) null);
+			Object methodReturnObject = sortSchedules.invoke(smc, (Object []) null);
+			
+			// EXPECTED OUTPUT
+			
+			if (methodReturnObject == null) throw new NullPointerException("sortSchedules() returned null; expected a Collection");
+			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("sortSchedules() did not return a Collection");
+			
+			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<>( ((Collection<ScheduleStub>) methodReturnObject) );
+			assertEquals(2, schedulesReturned.size());
+			
+			ScheduleStub returnedSchedule1 = schedulesReturned.get(0),
+						 returnedSchedule2 = schedulesReturned.get(1);
+			assertNotNull(returnedSchedule1);
+			assertNotNull(returnedSchedule2);
+			assertEquals(s1.getId(), returnedSchedule1.getId());
+			assertEquals(s2.getId(), returnedSchedule2.getId());
+			assertEquals(s1.getPantherID(), returnedSchedule1.getPantherID());
+			assertEquals(s2.getPantherID(), returnedSchedule2.getPantherID());
+			assertEquals(1, returnedSchedule1.getClasses().size());
+			assertEquals(1, returnedSchedule2.getClasses().size());
+			assertEquals(cen4012.getCourse(), ((ArrayList<ClassDetailsStub>)returnedSchedule1.getClasses()).get(0).getCourse());
+			assertEquals(mac1266.getCourse(), ((ArrayList<ClassDetailsStub>)returnedSchedule2.getClasses()).get(0).getCourse());
+		} catch (Exception ex) {
+			exceptionThrown = ex;
+		}
+		
+		assertNull(exceptionThrown);
+	}
 }
