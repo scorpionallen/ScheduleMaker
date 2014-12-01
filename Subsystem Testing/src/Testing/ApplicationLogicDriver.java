@@ -84,8 +84,8 @@ public void TEAM3_APPLOGIC_ST02() {
 		Assert.assertTrue(schedules.isEmpty());
 		schedules=facade.createSchedule(schOpt);
 		Assert.assertFalse(schedules.isEmpty());
-		Schedule sch=new Schedule("1231231");
 		
+	
 		
 	}
 	
@@ -95,7 +95,7 @@ public void TEAM3_APPLOGIC_ST02() {
 	 * 				- The Classdetails, coursedetails , campus, term, time and subject are defined in the storagestub.
 	 * 				- The object attributes for calling the function are defined.
 	 * Input: The different subjects wanting to enrroll and there attibutes are given i.e., University Fall 2014 STN2123,CAP6123,COT5124 and days 1100100 is given as input.  
-	 * Expected Output: A Schedule is added to the collection after calling createSchedule() method.
+	 * Expected Output: A Schedule is added to the collection after calling createSchedule() method. Assert.assertFalse(schedules.isEmpty()); gives true.
 	 * 
 	 */
 

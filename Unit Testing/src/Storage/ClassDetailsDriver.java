@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ClassDetailsDriver {
 	
 	/*
-	 * Purpose: testing the constructor for ClassDetails to see its assigning attributes correctly. 
+	 * Purpose: Testing the constructor for ClassDetails to see its assigning attributes correctly. 
 	 * Preconditions: 
 	 * 			-There is a course object cs which has a subject and catalog number.
 	 * 			-There is a class number associated with the course cs.
@@ -31,7 +31,7 @@ public class ClassDetailsDriver {
 	}
 	
 	/*
-	 * Purpose: testing the constructor for ClassDetails to see its assigning attributes correctly 
+	 * Purpose: Testing the constructor for ClassDetails to see its assigning attributes correctly 
 	 * 			even with semantically incorrect data type . 
 	 * Preconditions: 
 	 * 			-There is a course object cs which has a subject and catalog number.
@@ -109,7 +109,7 @@ public class ClassDetailsDriver {
 	
 	
 	/*
-	 *Purpose: testing method getTime();
+	 *Purpose: Testing the method getTime();
 	 *Preconditions: 
 	 *			- There is a classdetails object cd with a time attribute, object of timestub assigned to it. 
 	 *Input: a TimeStub object ts output of cd.getTime(); 
@@ -170,9 +170,9 @@ public class ClassDetailsDriver {
 	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
 	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
 	 * 				- There is no conflict with the days of the classes i.e., both classes are on different days in the week.
-	 *Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 
-	 *		 the second class is offered on days="0110101" i.e., tuesday, wednesday , friday and sunday.
-	 *Expected Output: assertFalse(cd1.hasConflict(cd0)0 returns true. 
+	 *Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at
+	 *       the second class is offered on days="0110101" i.e., tuesday, wednesday , friday and sunday.
+	 *Expected Output: assertFalse(cd1.hasConflict(cd0)) returns true. 
 	 */
 	
 	@Test
@@ -236,9 +236,6 @@ public class ClassDetailsDriver {
 	}
 	
 	/*
-	 * method: hasConflict();
-	 * There is conflict with days and conflict with time. Both classes start
-	 *  and end at same time.
 	 * Purpose: The method hasConflict() is Tested.
 	 * Preconditions:
 	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
@@ -518,8 +515,6 @@ public class ClassDetailsDriver {
 	}
 	
 	/*
-	 * method: toString();
-	 * The class Details as output display.
 	 * purpose: Testing toString() method.
 	 * Preconditions:
 	 * 				- All the attributes in ClassDetails class object cd are defined.
@@ -553,5 +548,44 @@ public class ClassDetailsDriver {
 	 	String tostring=cd.toString();
 	  Assert.assertEquals("STN2123\n1\n2:30-4:45\nMMC\n", tostring);
 	}
+	
+	/*
+	 * Purpose: The method hasConflict() is Tested.
+	 * Preconditions:
+	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
+	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
+	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
+	 * 				- There is conflict with days and conflict with time. Class 1 starts after class 2 
+	 *				  and end after class 2, but there is conflict.
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 3:30 to 4:30
+	 *		 the second class is offered on days="1010110" i.e., monday, wednesday , friday and saturday at 2:40 to 3:45
+	 * Expected Output: assertTrue(cd1.hasConflict(cd0); returns true.   
+	 * 
+	 */
+	@Test
+	public void Team3_CLASSDETAILS_UT21(){
+		ClassDetails cd0= new ClassDetails();
+		ClassDetails cd1= new ClassDetails();
+		TimeStub ts0=new TimeStub();
+		TimeStub ts1=new TimeStub();
+		cd0.time=ts0;
+		cd1.time=ts1;
+		ts0.days="1001010";
+		ts1.days="1010110";
+		ts0.frHr=1;
+		ts0.frMn=10;
+		ts0.toHr=3;
+		ts0.toMn=50;
+		ts1.frHr=3;
+		ts1.frMn=30;
+		ts1.toHr=4;
+		ts1.toMn=45;
+		
+		Assert.assertTrue(cd1.hasConflict(cd0));
+		
+		
+	}
+	
+	
 	
 }
