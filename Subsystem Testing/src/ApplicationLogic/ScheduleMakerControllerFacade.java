@@ -9,14 +9,14 @@ public class ScheduleMakerControllerFacade {
 	private final ScheduleMakerController SMC = new ScheduleMakerController();
 	private final StorageStub STORAGE = new StorageStub();
 	
-	public void buildPage() {
+	/*public void buildPage() {
 		new FormatPage().buildPage();
 	}
-	
+	*/
 	public String buildSchedulesPage(Collection<Schedule> schedules, int page) {
-		return new FormatPage().buildSchedulesPage(schedules, page);
+			return new FormatPage().buildSchedulesPage(schedules, page);
 	}
-	
+	/*
 	public void createPage() {
 		new FormatPage().createPage();
 	}
@@ -24,7 +24,7 @@ public class ScheduleMakerControllerFacade {
 	public void createPage(Schedule schedule[]) {
 		new FormatPage().createPage(schedule);
 	}
-	
+	*/
 	public Collection<Schedule> createSchedule(ScheduleOptions schOpt) {
 		return SMC.createSchedule(schOpt);
 	}
@@ -33,18 +33,24 @@ public class ScheduleMakerControllerFacade {
 		return SMC.createSchedule(term, courses, cmp, SPDays);
 	}
 	
-	public void getBalance() {
+	/*public void getBalance() {
 		SMC.getBalance();
 	}
 	
 	public void getSavedSchedule() {
 		SMC.getSavedSchedule();
 	}
+	*/
 	
 	public boolean isLoginValid(String pantherID, String password) {
+		new Authentication().createSession();
+		new Authentication().closeSession();
 		return new Authentication().isLoginValid(pantherID, password);
-	}
+			}
 	
+	
+	
+	/*
 	public String printCalendar(String calendar[][]) {
 		return new FormatPage().printCalendar(calendar);
 	}
@@ -60,4 +66,24 @@ public class ScheduleMakerControllerFacade {
 	public void sortSchedules() {
 		SMC.sortSchedules();
 	}
+	*/
+	public String getPantherID() {
+		
+		return new LoginOptions().getPantherID();
+		
+	}
+	
+	public void setPantherID(String pantherID) {
+		new LoginOptions().setPantherID(pantherID);
+    }
+
+    public String getPassword() {
+    	return new LoginOptions().getPassword();
+    }
+
+    public void setPassword(String password) {
+    	new LoginOptions().setPassword(password);
+    }
+    
+    
 }

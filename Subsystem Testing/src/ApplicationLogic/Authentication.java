@@ -14,7 +14,7 @@ public class Authentication
     public void createSession()
     {}
 
-    public void closeSession(String sessionID)
+    public void closeSession()
     {}
 
     public boolean isLoginValid(String pantherID, String password) {

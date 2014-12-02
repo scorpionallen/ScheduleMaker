@@ -49,7 +49,7 @@ public class StorageStub {
 	}
 	
 	public static void registerCourse(String campus, String term, String course, ClassDetails cds) {
-		if (campus == null || !campus.matches("^All|Biscayne|University$")) throw new IllegalArgumentException("Invalid campus value: " + campus);
+		if (campus == null || !campus.matches("^Biscayne|ALL|University$")) throw new IllegalArgumentException("Invalid campus value: " + campus);
 		if (term == null || !term.matches("^(Spring|Summer|Fall) [0-9]+$")) throw new IllegalArgumentException("Invalid term value: " + term);
 		if (course == null || !course.matches("^[A-Z]{3}[0-9]{4}$")) throw new IllegalArgumentException("Invalid course value: " + course);
 		if (cds == null) throw new IllegalArgumentException("ClassDetailsStub paramater cannot be null");
