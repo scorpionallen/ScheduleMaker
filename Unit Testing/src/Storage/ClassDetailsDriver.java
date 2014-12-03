@@ -586,7 +586,19 @@ public class ClassDetailsDriver {
 		
 	}
 	
-	
+	/*
+	 * Purpose: The method hasConflict() is Tested for branch coverage where course 1 starts before course 2 and ends at the same hour.
+	 * Preconditions:
+	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
+	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
+	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
+	 * 				- There is conflict with days and conflict with time. Class 1 starts before class 2 
+	 *				  and ends with class 2.
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 1:30 to 3:50
+	 *		 the second class is offered on days="1001010" i.e., monday, thursday and saturday at 1:20 to 3:50
+	 * Expected Output: assertFalse(cd1.hasConflict(cd0)); returns true.   
+	 * 
+	 */
 	
 	@Test
 	public void Team3_CLASSDETAILS_UT22(){
@@ -608,9 +620,23 @@ public class ClassDetailsDriver {
 		ts1.toMn=50;
 		
 		Assert.assertFalse(cd1.hasConflict(cd0));
-		/* 72*/
-		
+				
 	}
+	
+	/*
+	 * Purpose: The method hasConflict() is Tested for branch coverage where class 2 starts after class 1 ends but at the same hour.
+	 * Preconditions:
+	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
+	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
+	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
+	 * 				- There is conflict with days and conflict with time. Class 1 starts before class 2 
+	 *				  and ends with class 2.
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 1:30 to 2:10
+	 *		 the second class is offered on days="1001010" i.e., monday, thursday and saturday at 2:20 to 3:30
+	 * Expected Output: assertFalse(cd1.hasConflict(cd0)); returns true.   
+	 * 
+	 */
+	
 	
 	@Test
 	public void Team3_CLASSDETAILS_UT23(){
@@ -632,9 +658,23 @@ public class ClassDetailsDriver {
 		ts1.toMn=50;
 		
 		Assert.assertFalse(cd1.hasConflict(cd0));
-		/*76*/
+		
 		
 	}
+	
+	/*
+	 * Purpose: The method hasConflict() is Tested for branch coverage where class 1 starts after class 2 ends but at the same hour.
+	 * Preconditions:
+	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
+	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
+	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
+	 * 				- There is conflict with days and conflict with time. Class 1 starts before class 2 
+	 *				  and ends with class 2.
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 2:20 to 3:30
+	 *		 the second class is offered on days="1001010" i.e., monday, thursday and saturday at 1:30 to 2:10
+	 * Expected Output: assertFalse(cd1.hasConflict(cd0)); returns true.   
+	 * 
+	 */
 	
 	@Test
 	public void Team3_CLASSDETAILS_UT24(){
@@ -656,9 +696,23 @@ public class ClassDetailsDriver {
 		ts1.toMn=50;
 		
 		Assert.assertFalse(cd0.hasConflict(cd1));
-		/*76*/
+		
 		
 	}
+	
+	/*
+	 * Purpose: The method hasConflict() is Tested for branch coverage where class 2 starts after class 1 ends after atleast an hour.
+	 * Preconditions:
+	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
+	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
+	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
+	 * 				- There is conflict with days and conflict with time. Class 1 starts before class 2 
+	 *				  and ends with class 2.
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 2:20 to 2:10
+	 *		 the second class is offered on days="1001010" i.e., monday, thursday and saturday at 3:20 to 4:50
+	 * Expected Output: assertFalse(cd1.hasConflict(cd0)); returns true.   
+	 * 
+	 */
 	
 	@Test
 	public void Team3_CLASSDETAILS_UT25(){
@@ -680,15 +734,15 @@ public class ClassDetailsDriver {
 		ts1.toMn=50;
 		
 		Assert.assertFalse(cd0.hasConflict(cd1));
-		/*76*/
+		
 		
 	}
 	
 	/*
 	 * purpose: Testing toString() method.
 	 * Preconditions:
-	 * 				- to string branch coverage.
-	 * Input:  all the attributes are given values accordingly.
+	 * 				- A class details object cd0 is created for a course "STN2123" for Fall 2014. 
+	 * Input:  The toString() method is called for the given ClassDetails object cd0
 	 * Expected Output: The tostring String returns null since campus and time are not specified. 
 	 * 		
 	 * 
@@ -699,7 +753,7 @@ public class ClassDetailsDriver {
 		String Subject="STN";
 		String ctlgnumbr="2123";
 		String classnumbr="1";
-		String term="FALL";
+		String term="FALL 2014";
 		
 		CourseStub cs=new CourseStub(Subject,ctlgnumbr);
 		ClassDetails cd=new ClassDetails(cs,classnumbr);
