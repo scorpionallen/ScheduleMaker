@@ -527,7 +527,7 @@ public class ClassDetailsDriver {
 	 * 
 	 */
 	@Test
-	public void Team3_CLASSDETAILS_UT20(){
+	public void Team3_CLASSDETAILS_UT19(){
 		String campus="MMC";
 		String Subject="STN";
 		String ctlgnumbr="2123";
@@ -550,20 +550,20 @@ public class ClassDetailsDriver {
 	}
 	
 	/*
-	 * Purpose: The method hasConflict() is Tested.
+	 * Purpose: The method hasConflict() is Tested for branch and statement coverage where course 1 starts before course 2 but ends after course 2 starts.
 	 * Preconditions:
 	 * 				- There is a ClassDetails object cd0 and cd1 for two seperate classes. 
 	 * 				- There exists a TimeStub object ts0 and ts1 for both the classes respectively assigned to cd0 and cd1.
 	 * 				- There exists attributes days and time respectively for each class in timeStub objects ts0 and ts1. 
 	 * 				- There is conflict with days and conflict with time. Class 1 starts after class 2 
 	 *				  and end after class 2, but there is conflict.
-	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 3:30 to 4:30
-	 *		 the second class is offered on days="1010110" i.e., monday, wednesday , friday and saturday at 2:40 to 3:45
+	 * Input: The first class is offered on days="1001010" i.e., monday, thursday and saturday at 1:10 to 3:50
+	 *		 the second class is offered on days="1010110" i.e., monday, wednesday , friday and saturday at 3:30 to 4:45
 	 * Expected Output: assertTrue(cd1.hasConflict(cd0); returns true.   
 	 * 
 	 */
 	@Test
-	public void Team3_CLASSDETAILS_UT21(){
+	public void Team3_CLASSDETAILS_UT20(){
 		ClassDetails cd0= new ClassDetails();
 		ClassDetails cd1= new ClassDetails();
 		TimeStub ts0=new TimeStub();
@@ -601,7 +601,7 @@ public class ClassDetailsDriver {
 	 */
 	
 	@Test
-	public void Team3_CLASSDETAILS_UT22(){
+	public void Team3_CLASSDETAILS_UT21(){
 		ClassDetails cd0= new ClassDetails();
 		ClassDetails cd1= new ClassDetails();
 		TimeStub ts0=new TimeStub();
@@ -639,7 +639,7 @@ public class ClassDetailsDriver {
 	
 	
 	@Test
-	public void Team3_CLASSDETAILS_UT23(){
+	public void Team3_CLASSDETAILS_UT22(){
 		ClassDetails cd0= new ClassDetails();
 		ClassDetails cd1= new ClassDetails();
 		TimeStub ts0=new TimeStub();
@@ -677,7 +677,7 @@ public class ClassDetailsDriver {
 	 */
 	
 	@Test
-	public void Team3_CLASSDETAILS_UT24(){
+	public void Team3_CLASSDETAILS_UT23(){
 		ClassDetails cd0= new ClassDetails();
 		ClassDetails cd1= new ClassDetails();
 		TimeStub ts0=new TimeStub();
@@ -715,7 +715,7 @@ public class ClassDetailsDriver {
 	 */
 	
 	@Test
-	public void Team3_CLASSDETAILS_UT25(){
+	public void Team3_CLASSDETAILS_UT24(){
 		ClassDetails cd0= new ClassDetails();
 		ClassDetails cd1= new ClassDetails();
 		TimeStub ts0=new TimeStub();
@@ -739,7 +739,7 @@ public class ClassDetailsDriver {
 	}
 	
 	/*
-	 * purpose: Testing toString() method.
+	 * purpose: Testing toString() method for branch coverage, where input is empty strings.
 	 * Preconditions:
 	 * 				- A class details object cd0 is created for a course "STN2123" for Fall 2014. 
 	 * Input:  The toString() method is called for the given ClassDetails object cd0
@@ -748,7 +748,7 @@ public class ClassDetailsDriver {
 	 * 
 	 */
 	@Test
-	public void Team3_CLASSDETAILS_UT26(){
+	public void Team3_CLASSDETAILS_UT25(){
 		String campus=null;
 		String Subject="STN";
 		String ctlgnumbr="2123";

@@ -252,17 +252,9 @@ public void TEAM3_APPLOGIC_ST03() {
 		
 	}
 	
-	/*
-	 * Test cases : testing LoginOptions class functions.
-	 * purpose: testing the LoginOptions class methods
-	 * PreConditions:
-	 * 				- There are PantherId and Password stored in storagestub for implem
-	 * 
-	 * 
-	 */
 	
 	/*
-	 * Purpose: Testing if the the pantherId saved for the schedule is same as one which is defined
+	 * Purpose: Testing if the the pantherId saved for the schedule is same as one which is saved by login options.
 	 * Preconditions:
 	 * 		- There exists pantherID:1231231 and Password: abcabc123 in the storageStub
 	 * 		- The pantherId and Password for a schedule is set by using loginOptions class methods.
@@ -288,14 +280,9 @@ public void TEAM3_APPLOGIC_ST03() {
 	}
 	
 	
+		
 	/*
-	 * Test cases : testing LoginOptions class functions.
-	
-	 * 
-	 */
-	
-	/*
- * Purpose: Testing if the the pantherId saved for the schedule is same as one which is defined
+ * Purpose: Testing if the the password saved for the schedule is same as one which is defined
 	 * Preconditions:
 	 * 		- There exists pantherID:1231231 and Password: abcabc123 in the storageStub
 	 * 		- The pantherId and Password for a schedule is set by using loginOptions class methods.
