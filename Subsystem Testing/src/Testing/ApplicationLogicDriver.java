@@ -251,7 +251,9 @@ public void TEAM3_APPLOGIC_ST03() {
 	
 	/*
 	 * Test cases : testing LoginOptions class functions.
-	 * 
+	 * purpose: testing the LoginOptions class methods
+	 * PreConditions:
+	 * 				- There are PantherId and Password stored in storagestub for implem
 	 * 
 	 * 
 	 */
@@ -578,7 +580,7 @@ public void TEAM3_APPLOGIC_ST03() {
 	public void TEAM3_APPLOGIC_ST17() {
 			StorageStub.initCourses();
 			String term="Fall 2014";
-			String camps="ALL";
+			String camps="All";
 			ClassDetails cd0=new ClassDetails();
 			Time t0= new Time("02:30","03:30","1100100");
 			cd0.setTime(t0);
@@ -612,8 +614,53 @@ public void TEAM3_APPLOGIC_ST03() {
 			Collection<Schedule> schedules;	
 			schedules = new ArrayList<Schedule>();
 			//Assert.assertTrue(schedules.isEmpty());
-			schedules=facade.createSchedule(term, courses, camps, "0011000");
+			schedules=facade.createSchedule(term, courses, camps, "1100000");
 			Assert.assertTrue(schedules.isEmpty());
 			
 		}
+	
+	@Test
+	public void TEAM3_APPLOGIC_ST18() {
+			StorageStub.initCourses();
+			String term="Fall 2014";
+			String camps="All";
+			ClassDetails cd0=new ClassDetails();
+			Time t0= new Time("02:30","03:30","1100100");
+			cd0.setTime(t0);
+			cd0.subject="STN";
+			cd0.ctlgnumbr="2123";
+			
+			StorageStub.registerCourse(camps, term, "STN2123", cd0);
+			ClassDetails cd1=new ClassDetails();
+			Time t1= new Time("01:30","02:20","1100100");
+			cd1.setTime(t1);
+			cd1.subject="CAP";
+			cd1.ctlgnumbr="6123";
+			StorageStub.registerCourse(camps, term, "CAP6123", cd1);
+			
+			ClassDetails cd2=new ClassDetails();
+			Time t2= new Time("05:30","07:30","1100100");
+			cd2.setTime(t2);
+			cd2.subject="COT";
+			cd2.ctlgnumbr="5124";
+			StorageStub.registerCourse(camps, term, "COT5124", cd2);
+			
+			
+			
+			ScheduleMakerControllerFacade facade = new ScheduleMakerControllerFacade();
+			Collection<String> courses;
+			courses=new ArrayList<String>();
+			courses.add("STN2123");
+			courses.add("CAP6123");
+			courses.add("COT5124");
+			
+			Collection<Schedule> schedules;	
+			schedules = new ArrayList<Schedule>();
+			//Assert.assertTrue(schedules.isEmpty());
+			schedules=facade.createSchedule(term, courses, camps, "0000011");
+			Assert.assertTrue(schedules.isEmpty());
+			
+		}
+	
+	
 	}

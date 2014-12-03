@@ -588,4 +588,128 @@ public class ClassDetailsDriver {
 	
 	
 	
+	@Test
+	public void Team3_CLASSDETAILS_UT22(){
+		ClassDetails cd0= new ClassDetails();
+		ClassDetails cd1= new ClassDetails();
+		TimeStub ts0=new TimeStub();
+		TimeStub ts1=new TimeStub();
+		cd0.time=ts0;
+		cd1.time=ts1;
+		ts0.days="1001010";
+		ts1.days="1001010";
+		ts0.frHr=1;
+		ts0.frMn=30;
+		ts0.toHr=3;
+		ts0.toMn=50;
+		ts1.frHr=1;
+		ts1.frMn=20;
+		ts1.toHr=3;
+		ts1.toMn=50;
+		
+		Assert.assertTrue(cd1.hasConflict(cd0));
+		/* 72*/
+		
+	}
+	
+	@Test
+	public void Team3_CLASSDETAILS_UT23(){
+		ClassDetails cd0= new ClassDetails();
+		ClassDetails cd1= new ClassDetails();
+		TimeStub ts0=new TimeStub();
+		TimeStub ts1=new TimeStub();
+		cd0.time=ts0;
+		cd1.time=ts1;
+		ts0.days="1001010";
+		ts1.days="1001010";
+		ts0.frHr=1;
+		ts0.frMn=30;
+		ts0.toHr=2;
+		ts0.toMn=10;
+		ts1.frHr=2;
+		ts1.frMn=20;
+		ts1.toHr=3;
+		ts1.toMn=50;
+		
+		Assert.assertFalse(cd1.hasConflict(cd0));
+		/*76*/
+		
+	}
+	
+	@Test
+	public void Team3_CLASSDETAILS_UT24(){
+		ClassDetails cd0= new ClassDetails();
+		ClassDetails cd1= new ClassDetails();
+		TimeStub ts0=new TimeStub();
+		TimeStub ts1=new TimeStub();
+		cd0.time=ts0;
+		cd1.time=ts1;
+		ts0.days="1001010";
+		ts1.days="1001010";
+		ts0.frHr=1;
+		ts0.frMn=30;
+		ts0.toHr=2;
+		ts0.toMn=10;
+		ts1.frHr=2;
+		ts1.frMn=20;
+		ts1.toHr=3;
+		ts1.toMn=50;
+		
+		Assert.assertFalse(cd0.hasConflict(cd1));
+		/*76*/
+		
+	}
+	
+	@Test
+	public void Team3_CLASSDETAILS_UT25(){
+		ClassDetails cd0= new ClassDetails();
+		ClassDetails cd1= new ClassDetails();
+		TimeStub ts0=new TimeStub();
+		TimeStub ts1=new TimeStub();
+		cd0.time=ts0;
+		cd1.time=ts1;
+		ts0.days="1001010";
+		ts1.days="1001010";
+		ts0.frHr=1;
+		ts0.frMn=30;
+		ts0.toHr=2;
+		ts0.toMn=10;
+		ts1.frHr=3;
+		ts1.frMn=20;
+		ts1.toHr=4;
+		ts1.toMn=50;
+		
+		Assert.assertFalse(cd0.hasConflict(cd1));
+		/*76*/
+		
+	}
+	
+	/*
+	 * purpose: Testing toString() method.
+	 * Preconditions:
+	 * 				- to string branch coverage.
+	 * Input:  all the attributes are given values accordingly.
+	 * Expected Output: The tostring String returns null since campus and time are not specified. 
+	 * 		
+	 * 
+	 */
+	@Test
+	public void Team3_CLASSDETAILS_UT26(){
+		String campus=null;
+		String Subject="STN";
+		String ctlgnumbr="2123";
+		String classnumbr="1";
+		String term="FALL";
+		
+		CourseStub cs=new CourseStub(Subject,ctlgnumbr);
+		ClassDetails cd=new ClassDetails(cs,classnumbr);
+		TimeStub ts=new TimeStub();
+		
+		cd.setTerm(term);
+		cd.setCampus(campus);
+	 	String tostring=cd.toString();
+	  Assert.assertTrue(tostring!=null);
+	}
+	
+	
 }
