@@ -64,11 +64,11 @@ public class ClassDetailsStub {
 	}
 	
 	/** The configuration conflicts used by the hasConflict() method. */
-	private static final TreeMap<TEST_CONFIG, List<TEST_CONFIG>> CONFLICTING_CONFIGURATIONS = new TreeMap<>();
+	private static final TreeMap<TEST_CONFIG, List<TEST_CONFIG>> CONFLICTING_CONFIGURATIONS = new TreeMap<TEST_CONFIG, List<TEST_CONFIG>>();
 	static {
 		// declare that every schedule conflicts with itself
 		for (TEST_CONFIG config : TEST_CONFIG.values()) {
-			ArrayList<TEST_CONFIG> selfConflictList = new ArrayList<>();
+			ArrayList<TEST_CONFIG> selfConflictList = new ArrayList<TEST_CONFIG>();
 			selfConflictList.add(config);
 			CONFLICTING_CONFIGURATIONS.put(config, selfConflictList);
 		}

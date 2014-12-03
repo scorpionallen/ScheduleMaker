@@ -6,8 +6,8 @@ import java.util.TreeMap;
 
 public class CourseStub {
 	// for each campus, define a mapping from TERM/COURSE to a list of CLASSDETAILS
-	private static final TreeMap<String,ArrayList<ClassDetailsStub>> BBC_COURSES = new TreeMap<>();
-	private static final TreeMap<String,ArrayList<ClassDetailsStub>> MMC_COURSES = new TreeMap<>();
+	private static final TreeMap<String,ArrayList<ClassDetailsStub>> BBC_COURSES = new TreeMap<String,ArrayList<ClassDetailsStub>>();
+	private static final TreeMap<String,ArrayList<ClassDetailsStub>> MMC_COURSES = new TreeMap<String,ArrayList<ClassDetailsStub>>();
 	
 	public static void initializeCourses() {
 		BBC_COURSES.clear();
@@ -66,7 +66,7 @@ public class CourseStub {
 	public String getCatlgNbr() { return catlgNbr; }
 	
 	public Collection<ClassDetailsStub> getClasses(String term, Collection<String> campuses) {
-		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
+		ArrayList<ClassDetailsStub> courses = new ArrayList<ClassDetailsStub>();
 		String searchKey = term + " " + this.toString();
 		
 		if (campuses.contains("Biscayne") && BBC_COURSES.get(searchKey) != null) {

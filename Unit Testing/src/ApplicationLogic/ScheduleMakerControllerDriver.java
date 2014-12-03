@@ -31,13 +31,13 @@ public class ScheduleMakerControllerDriver {
 		// PRECONDITIONS
 		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
 		
-		ArrayList<ClassDetailsStub> s = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s = new ArrayList<ClassDetailsStub>();
 		s.add(c);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ArrayList<ClassDetailsStub>> sameSchedules = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> sameSchedules = new ArrayList<ArrayList<ClassDetailsStub>>();
 		sameSchedules.add(s);
 		sameSchedules.add(s);
 		
@@ -60,13 +60,13 @@ public class ScheduleMakerControllerDriver {
 		// PRECONDITIONS
 		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.SatOnly);
 		
-		ArrayList<ClassDetailsStub> s = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s = new ArrayList<ClassDetailsStub>();
 		s.add(c);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ArrayList<ClassDetailsStub>> oneSchedule = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> oneSchedule = new ArrayList<ArrayList<ClassDetailsStub>>();
 		oneSchedule.add(s);
 		
 		// EXPECTED OUTPUT
@@ -91,18 +91,18 @@ public class ScheduleMakerControllerDriver {
 						 c2 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2),
 						 c3 = new ClassDetailsStub(TEST_CONFIG.TueThu);
 		
-		ArrayList<ClassDetailsStub> s1 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s1 = new ArrayList<ClassDetailsStub>();
 		s1.add(c1);
 		s1.add(c3);
 		
-		ArrayList<ClassDetailsStub> s2 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s2 = new ArrayList<ClassDetailsStub>();
 		s2.add(c2);
 		s2.add(c3);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new ArrayList<>();
+		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new ArrayList<ArrayList<ClassDetailsStub>>();
 		twoSchedules.add(s1);
 		twoSchedules.add(s2);
 		
@@ -127,16 +127,16 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub c1 = new ClassDetailsStub(TEST_CONFIG.SatOnly),
 						 c2 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
 		
-		ArrayList<ClassDetailsStub> s1 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s1 = new ArrayList<ClassDetailsStub>();
 		s1.add(c1);
 		
-		ArrayList<ClassDetailsStub> s2 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> s2 = new ArrayList<ClassDetailsStub>();
 		s2.add(c2);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<>();
+		Collection<ArrayList<ClassDetailsStub>> twoSchedules = new HashSet<ArrayList<ClassDetailsStub>>();
 		twoSchedules.add(s1);
 		twoSchedules.add(s2);
 		
@@ -165,7 +165,7 @@ public class ScheduleMakerControllerDriver {
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+		Collection<ScheduleStub> savedSchedules = new ArrayList<ScheduleStub>();
 		smc.saveSchedules(savedSchedules);
 		
 		// EXPECTED OUTPUT
@@ -199,13 +199,13 @@ public class ScheduleMakerControllerDriver {
 		// PRECONDITIONS
 		ClassDetailsStub c = new ClassDetailsStub(TEST_CONFIG.TueThu);
 		
-		Collection<ClassDetailsStub> s = new ArrayList<>();
+		Collection<ClassDetailsStub> s = new ArrayList<ClassDetailsStub>();
 		s.add(c);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<ScheduleStub> savedSchedules = new ArrayList<>();
+		Collection<ScheduleStub> savedSchedules = new ArrayList<ScheduleStub>();
 		savedSchedules.add(new ScheduleStub(s));
 		
 		// EXPECTED OUTPUT
@@ -242,7 +242,7 @@ public class ScheduleMakerControllerDriver {
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<Collection<?>> emptyCollection = new ArrayList<>();
+		Collection<Collection<?>> emptyCollection = new ArrayList<Collection<?>>();
 		
 		// EXPECTED OUTPUT
 		boolean sizeIsOne = smc.sizeIsOne(emptyCollection);
@@ -260,13 +260,13 @@ public class ScheduleMakerControllerDriver {
 	@Test
 	public void TEAM3_CONTROLLER_UT08() {
 		// PRECONDITIONS
-		ArrayList<Integer> a = new ArrayList<>();
+		ArrayList<Integer> a = new ArrayList<Integer>();
 		a.add(100);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<Collection<?>> singleElementCollection = new HashSet<>();
+		Collection<Collection<?>> singleElementCollection = new HashSet<Collection<?>>();
 		singleElementCollection.add(a);
 		
 		// EXPECTED OUTPUT
@@ -286,18 +286,18 @@ public class ScheduleMakerControllerDriver {
 	@Test
 	public void TEAM3_CONTROLLER_UT09() {
 		// PRECONDITIONS
-		ArrayList<Integer> a1 = new ArrayList<>();
+		ArrayList<Integer> a1 = new ArrayList<Integer>();
 		a1.add(100);
 		a1.add(200);
 		
-		ArrayList<Integer> a2 = new ArrayList<>();
+		ArrayList<Integer> a2 = new ArrayList<Integer>();
 		a2.add(150);
 		a2.add(250);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
 		// INPUT
-		Collection<Collection<?>> doubleElementCollection = new Vector<>();
+		Collection<Collection<?>> doubleElementCollection = new Vector<Collection<?>>();
 		doubleElementCollection.add(a1);
 		doubleElementCollection.add(a2);
 		
@@ -517,7 +517,7 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub cop1101 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1B);
 		CourseStub.registerCourse("Biscayne", term, cop1101);
 		
-		ArrayList<String> courses = new ArrayList<>();
+		ArrayList<String> courses = new ArrayList<String>();
 		courses.add(cop1101.getCourse());
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
@@ -559,7 +559,7 @@ public class ScheduleMakerControllerDriver {
 		CourseStub.registerCourse("All", term, cop1101);
 		CourseStub.registerCourse("All", term, mad3512);
 		
-		ArrayList<String> courses = new ArrayList<>();
+		ArrayList<String> courses = new ArrayList<String>();
 		courses.add(cop1101.getCourse());
 		courses.add(mad3512.getCourse());
 		
@@ -629,7 +629,7 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub mad3512 = new ClassDetailsStub(TEST_CONFIG.MonWedFri2);
 		CourseStub.registerCourse("All", term, mad3512);
 		
-		ArrayList<String> courses = new ArrayList<>();
+		ArrayList<String> courses = new ArrayList<String>();
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
 		
@@ -744,7 +744,7 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub mac1266 = new ClassDetailsStub(TEST_CONFIG.TueThu);
 		CourseStub.registerCourse(campus, term, mac1266);
 		
-		Collection<String> courses = new ArrayList<>();
+		Collection<String> courses = new ArrayList<String>();
 		courses.add("");
 		courses.add("XYZ9999");
 		
@@ -782,7 +782,7 @@ public class ScheduleMakerControllerDriver {
 		CourseStub.registerCourse("University", term, cop1101);
 		CourseStub.registerCourse("All", term, mac1266);
 		
-		Collection<String> courses = new ArrayList<>();
+		Collection<String> courses = new ArrayList<String>();
 		courses.add(cop1101.getCourse());
 		courses.add(mac1266.getCourse());
 		
@@ -841,7 +841,7 @@ public class ScheduleMakerControllerDriver {
 			if (methodReturnObject == null) throw new NullPointerException("findClasses() returned null; expected a Collection");
 			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("findClasses() did not return a Collection");
 			
-			classesReturned = new ArrayList<>( ((Collection<ClassDetailsStub>) methodReturnObject) );
+			classesReturned = new ArrayList<ClassDetailsStub>( ((Collection<ClassDetailsStub>) methodReturnObject) );
 		} catch (Exception ex) {
 			exceptionThrown = ex;
 		}
@@ -876,14 +876,14 @@ public class ScheduleMakerControllerDriver {
 		ClassDetailsStub cen4012 = new ClassDetailsStub(TEST_CONFIG.MonWedFri1A);
 		CourseStub.registerCourse(campus, term, cen4012);
 		
-		ArrayList<ClassDetailsStub> courses = new ArrayList<>();
+		ArrayList<ClassDetailsStub> courses = new ArrayList<ClassDetailsStub>();
 		courses.add(cen4012);
 		
 		ScheduleStub s = new ScheduleStub(courses);
 		s.setId(scheduleID);
 		s.setPantherID(pantherID);
 		
-		ArrayList<ScheduleStub> scheduleList = new ArrayList<>();
+		ArrayList<ScheduleStub> scheduleList = new ArrayList<ScheduleStub>();
 		scheduleList.add(s);
 		
 		ScheduleMakerController smc = new ScheduleMakerController();
@@ -901,7 +901,7 @@ public class ScheduleMakerControllerDriver {
 			if (methodReturnObject == null) throw new NullPointerException("getSavedSchedule() returned null; expected a Collection");
 			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("getSavedSchedule() did not return a Collection");
 			
-			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<>( ((Collection<ScheduleStub>) methodReturnObject) );
+			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<ScheduleStub>( ((Collection<ScheduleStub>) methodReturnObject) );
 			assertEquals(1, schedulesReturned.size());
 			
 			ScheduleStub s2 = schedulesReturned.get(0);
@@ -941,10 +941,10 @@ public class ScheduleMakerControllerDriver {
 		CourseStub.registerCourse("Biscayne", term, cen4012);
 		CourseStub.registerCourse("University", term, mac1266);
 		
-		ArrayList<ClassDetailsStub> courses1 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> courses1 = new ArrayList<ClassDetailsStub>();
 		courses1.add(cen4012);
 		
-		ArrayList<ClassDetailsStub> courses2 = new ArrayList<>();
+		ArrayList<ClassDetailsStub> courses2 = new ArrayList<ClassDetailsStub>();
 		courses1.add(mac1266);
 		
 		ScheduleStub s1 = new ScheduleStub(courses1);
@@ -955,7 +955,7 @@ public class ScheduleMakerControllerDriver {
 		s1.setId("Schedule2");
 		s1.setPantherID(pantherID);
 		
-		ArrayList<ScheduleStub> scheduleList = new ArrayList<>();
+		ArrayList<ScheduleStub> scheduleList = new ArrayList<ScheduleStub>();
 		scheduleList.add(s2);
 		scheduleList.add(s1);
 		
@@ -974,7 +974,7 @@ public class ScheduleMakerControllerDriver {
 			if (methodReturnObject == null) throw new NullPointerException("sortSchedules() returned null; expected a Collection");
 			else if (!(methodReturnObject instanceof Collection<?>)) throw new RuntimeException("sortSchedules() did not return a Collection");
 			
-			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<>( ((Collection<ScheduleStub>) methodReturnObject) );
+			ArrayList<ScheduleStub> schedulesReturned = new ArrayList<ScheduleStub>( ((Collection<ScheduleStub>) methodReturnObject) );
 			assertEquals(2, schedulesReturned.size());
 			
 			ScheduleStub returnedSchedule1 = schedulesReturned.get(0),

@@ -6,14 +6,14 @@ import java.util.TreeMap;
 
 public class StorageStub {
 	// for each campus, define a mapping from TERM/COURSE to a list of CLASSDETAILS
-	private static final TreeMap<String,ArrayList<ClassDetails>> COURSES_BBC = new TreeMap<>();
-	private static final TreeMap<String,ArrayList<ClassDetails>> COURSES_MMC = new TreeMap<>();
+	private static final TreeMap<String,ArrayList<ClassDetails>> COURSES_BBC = new TreeMap<String,ArrayList<ClassDetails>>();
+	private static final TreeMap<String,ArrayList<ClassDetails>> COURSES_MMC = new TreeMap<String,ArrayList<ClassDetails>>();
 	
 	// define the set of valid pantherID/password combinations
-	private static final TreeMap<String,String> CREDENTIALS = new TreeMap<>();
+	private static final TreeMap<String,String> CREDENTIALS = new TreeMap<String,String>();
 	
 	public Collection<ClassDetails> getClasses(String course, String term, Collection<String> campuses) {
-		ArrayList<ClassDetails> courses = new ArrayList<>();
+		ArrayList<ClassDetails> courses = new ArrayList<ClassDetails>();
 		String searchKey = term + " " + course;
 		
 		if (campuses.contains("Biscayne")) {
