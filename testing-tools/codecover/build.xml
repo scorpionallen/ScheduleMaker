@@ -126,7 +126,7 @@
     <echo>Using coverage log file: ${toString:coveragelog}</echo>
     <codecover>
       <load containerId="c" filename="${codecover.container.file}"/>
-      <analyze containerId="c" coveragelog="${coveragelog}" name="${codecover.session.name}"/>
+      <analyze containerId="c" coveragelog="${toString:coveragelog}" name="${codecover.session.name}"/>
       <save containerId="c" filename="${codecover.container.file}"/>
       <report containerId="c" destination="${codecover.report.dest}" template="${codecover.template.file}">
         <testCases>
