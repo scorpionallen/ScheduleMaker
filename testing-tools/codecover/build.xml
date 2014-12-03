@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Testing coverage using CodeCover" default="codecover-rebuild">
+  <description>Creates a coverage report of the result of testing the ScheduleMaker application (or selected parts) using CodeCover.</description>
+  
+  <property name="lib.dir" location="./lib"/>
+  <property name="temp.dir" location="./temp"/>
+  <property name="instrumented.classes.dir" location="${temp.dir}/classes-instr"/>
+  <property name="instrumented.source.dir" location="${temp.dir}/source-instr"/>
+  <property name="project.src.dir" location="${project.dir}/src"/>
+  <property name="codecover.container.file" location="${temp.dir}/container.xml"/>
+  <property name="codecover.coveragelog.file" location="${temp.dir}/coveragelog.clf"/>
+  <property name="codecover.report.dest" location="${temp.dir}/codecover-report.html"/>
+  <property name="codecover.template.file" location="HTML_Report_hierarchical.xml"/>
+  
+  <taskdef name="codecover" classname="org.codecover.ant.CodecoverTask" classpath="${lib.dir}/codecover-ant.jar"/>
+  
+  <target name="codecover-clean">
+    <delete dir="${temp.dir}"/>
+  </target>
+  
+  <target name="codecover-rebuild" depends="codecover-clean,codecover-instrument,codecover-compile,codecover-test,codecover-report"/>
+  
+  <target name="codecover-instrument" depends="codecover-clean">
+    <fail message="Missing required property project.dir!">
+      <condition>
+        <not>
+      	  <isset property="project.dir"/>
+        </not>
+      </condition>
+    </fail>
+    <mkdir dir="${instrumented.source.dir}"/>
+    <codecover>
+      <instrument containerId="c" language="java" instrumenter="CodeCover_Java_1.5" destination="${instrumented.source.dir}">
+        <source dir="${project.src.dir}">
+          <include name="**/*.java"/>
+        </source>
+      </instrument>
+      <save containerId="c" filename="${codecover.container.file}"/>
+    </codecover>
+  </target>
+  
+  <target name="codecover-compile" depends="codecover-instrument">
+    <mkdir dir="${instrumented.classes.dir}"/>
+    <javac srcdir="${instrumented.source.dir}" destdir="${instrumented.classes.dir}" debug="true" includeantruntime="false">
+      <classpath>
+        <pathelement path="${lib.dir}/org.codecover.instrumentation.java15-0.1.jar"/>
+        <pathelement path="${lib.dir}/junit-4.11.jar"/>
+        <pathelement path="${lib.dir}/hamcrest-core-1.3.jar"/>
+      </classpath>
+    </javac>
+  </target>
+  
+  <target name="codecover-test" depends="codecover-instrument">
+    <fail message="Missing required property driver.class!">
+      <condition>
+        <not>
+      	  <isset property="driver.class"/>
+        </not>
+      </condition>
+    </fail>
+    <java classname="org.junit.runner.JUnitCore" fork="true">
+      <classpath>
+        <pathelement path="${lib.dir}/junit-4.11.jar"/>
+        <pathelement path="${lib.dir}/hamcrest-core-1.3.jar"/>
+        <pathelement path="${lib.dir}/org.codecover.instrumentation.java15-0.1.jar"/>
+        <pathelement path="${instrumented.classes.dir}"/>
+        <pathelement path="${instrumented.source.dir}"/>
+      </classpath>
+      <jvmarg value="-Dorg.codecover.coverage-log-file=${codecover.coveragelog.file}"/>
+      <arg value="${driver.class}"/>
+    </java>
+  </target>
+  
+  <target name="codecover-report" depends="codecover-test">
+    <codecover>
+      <load containerId="c" filename="${codecover.container.file}"/>
+      <analyze containerId="c" coveragelog="${codecover.coveragelog.file}" name="${codecover.session.name}"/>
+      <save containerId="c" filename="${codecover.container.file}"/>
+      <report containerId="c" destination="${codecover.report.dest}" template="${codecover.template.file}">
+        <testCases>
+          <testSession pattern=".*">
+            <testCase pattern=".*"/>
+          </testSession>
+        </testCases>
+      </report>
+    </codecover>
+  </target>
+  
+  <target name="codecover-rebuild-web" depends="codecover-clean,codecover-instrument,codecover-compile-web"/>
+  
+  <target name="codecover-compile-web" depends="codecover-instrument">
+    <fail message="Missing required property tomcat.home!">
+      <condition>
+        <not>
+      	  <isset property="tomcat.home"/>
+        </not>
+      </condition>
+    </fail>
+    <fail message="Missing required property project.dir!">
+      <condition>
+        <not>
+      	  <isset property="project.dir"/>
+        </not>
+      </condition>
+    </fail>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/org.codecover.instrumentation.java15-0.1.jar"/>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/codecover-core.jar"/>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/servlet-live-notification.jar"/>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/plugins/commons-collections-2.1.1.jar"/>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/plugins/velocity-1.4.jar"/>
+    <copy todir="${tomcat.home}/lib" file="${lib.dir}/java-protocol-dummy.jar"/>
+    <javac srcdir="${instrumented.source.dir}" destdir="${application.classes.dir}" debug="true" includeantruntime="false">
+      <classpath>
+        <pathelement path="${lib.dir}/org.codecover.instrumentation.java15-0.1.jar"/>
+      </classpath>
+    </javac>
+    <copy todir="${application.classes.dir}">
+      <fileset dir="${instrumented.source.dir}"/>
+    </copy>
+  </target>
+  
+  <target name="codecover-report-web">
+    <first id="coveragelog">
+      <fileset dir="${tomcat.home}/bin" includes="**/*.clf"/>
+    </first>
+    <echo>Using coverage log file: ${toString:coveragelog}</echo>
+    <codecover>
+      <load containerId="c" filename="${codecover.container.file}"/>
+      <analyze containerId="c" coveragelog="${coveragelog}" name="${codecover.session.name}"/>
+      <save containerId="c" filename="${codecover.container.file}"/>
+      <report containerId="c" destination="${codecover.report.dest}" template="${codecover.template.file}">
+        <testCases>
+          <testSession pattern=".*">
+            <testCase pattern=".*"/>
+          </testSession>
+        </testCases>
+      </report>
+    </codecover>
+  </target>
+</project>

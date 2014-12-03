@@ -1,0 +1,1 @@
+./bin/ant.bat -propertyfile system-testing.properties codecover-report-web
