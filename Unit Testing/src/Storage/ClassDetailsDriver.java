@@ -607,7 +607,7 @@ public class ClassDetailsDriver {
 		ts1.toHr=3;
 		ts1.toMn=50;
 		
-		Assert.assertTrue(cd1.hasConflict(cd0));
+		Assert.assertFalse(cd1.hasConflict(cd0));
 		/* 72*/
 		
 	}
