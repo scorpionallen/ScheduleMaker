@@ -1,0 +1,1 @@
+./bin/ant -propertyfile system-testing.properties jacoco-report-web

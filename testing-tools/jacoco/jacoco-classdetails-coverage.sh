@@ -1,0 +1,1 @@
+./bin/ant -propertyfile unit-testing-classdetails.properties

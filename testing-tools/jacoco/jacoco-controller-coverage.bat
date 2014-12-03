@@ -1,0 +1,1 @@
+./bin/ant.bat -propertyfile unit-testing-controller.properties
