@@ -7,6 +7,8 @@ public class TimeStub {
     public int toMn;
     public String days;
     
+    public TimeStub() {  }
+    
     @Override
     public String toString() {
         return frHr + ":" + frMn + "-" + toHr + ":" + toMn;

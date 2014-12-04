@@ -7,6 +7,8 @@ public class ScheduleOptionsStub {
     private String m, t, w, th, f, s, su;
     private Integer gap;
     
+    public ScheduleOptionsStub() {  }
+    
     public String getTerm() { return term; }
     
     public void setTerm(String term) { this.term = term; }
